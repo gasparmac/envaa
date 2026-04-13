@@ -1,0 +1,1983 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ENVAA — Estándar Nacional de Variables Agronómicas Argentinas</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700&family=DM+Mono:wght@300;400;500&family=Source+Serif+4:ital,opsz,wght@0,8..60,300;0,8..60,400;0,8..60,600;1,8..60,300&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --green-deep: #1a3a2a;
+    --green-mid: #2d5a3d;
+    --green-soft: #4a7c59;
+    --green-pale: #e8f0ea;
+    --gold: #c9a84c;
+    --gold-light: #e8c97a;
+    --cream: #f7f3ed;
+    --cream-dark: #ede8e0;
+    --text-dark: #1a1a18;
+    --text-mid: #3d3d38;
+    --text-light: #7a7a72;
+    --white: #ffffff;
+    --border: rgba(26,58,42,0.15);
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'Source Serif 4', Georgia, serif;
+    background: var(--cream);
+    color: var(--text-dark);
+    overflow-x: hidden;
+  }
+
+  /* ── NOISE TEXTURE OVERLAY ── */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    opacity: 0.025;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 9999;
+  }
+
+  /* ── NAV ── */
+  nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 4rem;
+    height: 72px;
+    background: rgba(247,243,237,0.92);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border);
+  }
+
+  .nav-logo {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .nav-logo-badge {
+    width: 36px;
+    height: 36px;
+    background: var(--green-deep);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Playfair Display', serif;
+    color: var(--gold);
+    font-weight: 900;
+    font-size: 14px;
+    letter-spacing: 0.5px;
+  }
+
+  .nav-logo-text {
+    font-family: 'DM Mono', monospace;
+    font-size: 13px;
+    font-weight: 500;
+    letter-spacing: 2px;
+    color: var(--green-deep);
+    text-transform: uppercase;
+  }
+
+  .nav-links {
+    display: flex;
+    gap: 2.5rem;
+    list-style: none;
+    align-items: center;
+  }
+
+  .nav-links a {
+    font-family: 'DM Mono', monospace;
+    font-size: 11.5px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: var(--text-mid);
+    text-decoration: none;
+    transition: color 0.2s;
+  }
+
+  .nav-links a:hover { color: var(--green-deep); }
+
+  .nav-cta {
+    background: var(--green-deep) !important;
+    color: var(--cream) !important;
+    padding: 8px 20px;
+    font-size: 11px !important;
+    transition: background 0.2s !important;
+  }
+
+  .nav-cta:hover { background: var(--green-mid) !important; }
+
+  /* ── HERO ── */
+  .hero {
+    min-height: 100vh;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    padding-top: 72px;
+    overflow: hidden;
+  }
+
+  .hero-left {
+    background: var(--green-deep);
+    padding: 6rem 4rem 6rem 4rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .hero-left::before {
+    content: '';
+    position: absolute;
+    top: -100px; right: -100px;
+    width: 500px; height: 500px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(201,168,76,0.08) 0%, transparent 70%);
+  }
+
+  .hero-left::after {
+    content: 'ENVAA';
+    position: absolute;
+    bottom: -60px; right: -20px;
+    font-family: 'Playfair Display', serif;
+    font-size: 280px;
+    font-weight: 900;
+    color: rgba(255,255,255,0.03);
+    line-height: 1;
+    pointer-events: none;
+    user-select: none;
+  }
+
+  .hero-eyebrow {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 2rem;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    opacity: 0;
+    animation: fadeUp 0.8s 0.2s ease forwards;
+  }
+
+  .hero-eyebrow::before {
+    content: '';
+    width: 40px;
+    height: 1px;
+    background: var(--gold);
+    display: block;
+  }
+
+  .hero-title {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(3rem, 5vw, 4.5rem);
+    font-weight: 900;
+    line-height: 1.08;
+    color: var(--cream);
+    margin-bottom: 1.5rem;
+    opacity: 0;
+    animation: fadeUp 0.8s 0.4s ease forwards;
+  }
+
+  .hero-title em {
+    font-style: italic;
+    color: var(--gold-light);
+  }
+
+  .hero-subtitle {
+    font-size: 1.05rem;
+    line-height: 1.7;
+    color: rgba(247,243,237,0.65);
+    max-width: 480px;
+    margin-bottom: 3rem;
+    font-weight: 300;
+    opacity: 0;
+    animation: fadeUp 0.8s 0.6s ease forwards;
+  }
+
+  .hero-actions {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+    opacity: 0;
+    animation: fadeUp 0.8s 0.8s ease forwards;
+  }
+
+  .btn-primary {
+    background: var(--gold);
+    color: var(--green-deep);
+    font-family: 'DM Mono', monospace;
+    font-size: 12px;
+    font-weight: 500;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    padding: 14px 28px;
+    border: none;
+    cursor: pointer;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    transition: background 0.2s, transform 0.2s;
+  }
+
+  .btn-primary:hover { background: var(--gold-light); transform: translateY(-1px); }
+
+  .btn-secondary {
+    background: transparent;
+    color: var(--cream);
+    font-family: 'DM Mono', monospace;
+    font-size: 12px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    padding: 14px 28px;
+    border: 1px solid rgba(247,243,237,0.3);
+    cursor: pointer;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    transition: border-color 0.2s, background 0.2s;
+  }
+
+  .btn-secondary:hover { border-color: var(--cream); background: rgba(247,243,237,0.05); }
+
+  .hero-right {
+    background: var(--cream);
+    padding: 6rem 3rem 6rem 4rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    position: relative;
+  }
+
+  .hero-stat-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1px;
+    background: var(--border);
+    border: 1px solid var(--border);
+    margin-bottom: 3rem;
+    opacity: 0;
+    animation: fadeUp 0.8s 1s ease forwards;
+  }
+
+  .hero-stat {
+    background: var(--cream);
+    padding: 2rem 1.5rem;
+    position: relative;
+  }
+
+  .hero-stat-num {
+    font-family: 'Playfair Display', serif;
+    font-size: 3rem;
+    font-weight: 900;
+    color: var(--green-deep);
+    line-height: 1;
+    margin-bottom: 0.4rem;
+  }
+
+  .hero-stat-num span {
+    font-size: 1.5rem;
+    color: var(--gold);
+  }
+
+  .hero-stat-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: var(--text-light);
+  }
+
+  .hero-org-logos {
+    opacity: 0;
+    animation: fadeUp 0.8s 1.2s ease forwards;
+  }
+
+  .org-logos-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--text-light);
+    margin-bottom: 1.2rem;
+  }
+
+  .org-logos-row {
+    display: flex;
+    gap: 1.5rem;
+    align-items: center;
+    flex-wrap: wrap;
+  }
+
+  .org-badge {
+    border: 1px solid var(--border);
+    padding: 10px 18px;
+    font-family: 'DM Mono', monospace;
+    font-size: 13px;
+    font-weight: 500;
+    letter-spacing: 1px;
+    color: var(--green-deep);
+    background: white;
+    position: relative;
+  }
+
+  .org-badge::before {
+    content: '';
+    position: absolute;
+    top: 3px; left: 3px; right: -3px; bottom: -3px;
+    border: 1px solid var(--border);
+    z-index: -1;
+  }
+
+  /* ── MARQUEE ── */
+  .marquee-strip {
+    background: var(--green-deep);
+    padding: 14px 0;
+    overflow: hidden;
+    white-space: nowrap;
+    border-top: 2px solid var(--gold);
+    border-bottom: 1px solid rgba(201,168,76,0.2);
+  }
+
+  .marquee-inner {
+    display: inline-flex;
+    animation: marquee 30s linear infinite;
+  }
+
+  .marquee-item {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: rgba(247,243,237,0.5);
+    padding: 0 3rem;
+  }
+
+  .marquee-item strong {
+    color: var(--gold);
+    font-weight: 500;
+  }
+
+  /* ── ABOUT SECTION ── */
+  .section-about {
+    padding: 8rem 4rem;
+    max-width: 1400px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 1fr 2fr;
+    gap: 6rem;
+    align-items: start;
+    background: var(--cream);
+  }
+
+  @media (max-width: 768px) {
+    .section-about {
+      grid-template-columns: 1fr !important;
+      gap: 2rem !important;
+      padding: 4rem 1.5rem !important;
+    }
+  }
+
+  .section-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 1.5rem;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .section-label::before {
+    content: '';
+    width: 24px;
+    height: 1px;
+    background: var(--gold);
+  }
+
+  .about-sticky {
+    position: sticky;
+    top: 100px;
+  }
+
+  @media (max-width: 768px) {
+    .about-sticky { position: static; }
+  }
+
+  .about-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 2.8rem;
+    font-weight: 700;
+    line-height: 1.15;
+    color: var(--green-deep);
+  }
+
+  .about-title em {
+    font-style: italic;
+    color: var(--green-soft);
+  }
+
+  .about-content p {
+    font-size: 1.1rem;
+    line-height: 1.8;
+    color: var(--text-dark);
+    margin-bottom: 1.5rem;
+    font-weight: 400;
+  }
+
+  .about-content p strong {
+    font-weight: 600;
+    color: var(--text-dark);
+  }
+
+  .about-pull-quote {
+    border-left: 3px solid var(--gold);
+    padding: 1.5rem 0 1.5rem 2rem;
+    margin: 2.5rem 0;
+    font-family: 'Playfair Display', serif;
+    font-size: 1.5rem;
+    font-style: italic;
+    color: var(--green-deep);
+    line-height: 1.5;
+    background: var(--cream);
+  }
+
+  /* ── ORGANIZATIONS ── */
+  .section-orgs {
+    background: var(--green-deep);
+    padding: 8rem 4rem;
+  }
+
+  .orgs-inner {
+    max-width: 1400px;
+    margin: 0 auto;
+  }
+
+  .orgs-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    margin-bottom: 4rem;
+    border-bottom: 1px solid rgba(247,243,237,0.1);
+    padding-bottom: 2rem;
+  }
+
+  .orgs-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 2.5rem;
+    color: var(--cream);
+    font-weight: 700;
+  }
+
+  .orgs-count {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 2px;
+    color: rgba(247,243,237,0.4);
+    text-transform: uppercase;
+  }
+
+  .orgs-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1px;
+    background: rgba(247,243,237,0.08);
+  }
+
+  .org-card {
+    background: rgba(26,58,42,0.95);
+    padding: 3rem;
+    position: relative;
+    overflow: hidden;
+    transition: background 0.3s;
+  }
+
+  .org-card:hover { background: rgba(45,90,61,0.6); }
+
+  .org-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%; height: 3px;
+    background: var(--gold);
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.3s;
+  }
+
+  .org-card:hover::before { transform: scaleX(1); }
+
+  .org-card-number {
+    font-family: 'Playfair Display', serif;
+    font-size: 5rem;
+    font-weight: 900;
+    color: rgba(201,168,76,0.1);
+    line-height: 1;
+    margin-bottom: 1.5rem;
+  }
+
+  .org-card-name {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 0.8rem;
+  }
+
+  .org-card-fullname {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.6rem;
+    font-weight: 700;
+    color: var(--cream);
+    margin-bottom: 1.2rem;
+    line-height: 1.3;
+  }
+
+  .org-card-desc {
+    font-size: 0.9rem;
+    line-height: 1.7;
+    color: rgba(247,243,237,0.55);
+    font-weight: 300;
+  }
+
+  .org-card-tag {
+    display: inline-block;
+    margin-top: 1.5rem;
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 1px;
+    padding: 5px 10px;
+    border: 1px solid rgba(201,168,76,0.3);
+    color: var(--gold);
+    text-transform: uppercase;
+  }
+
+  /* ── VARIABLES EXPLORER ── */
+  .section-variables {
+    padding: 8rem 4rem;
+    max-width: 1400px;
+    margin: 0 auto;
+  }
+
+  .variables-header {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 4rem;
+    align-items: end;
+    margin-bottom: 4rem;
+  }
+
+  .variables-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 2.8rem;
+    font-weight: 700;
+    color: var(--green-deep);
+    line-height: 1.15;
+  }
+
+  .variables-intro {
+    font-size: 1rem;
+    color: var(--text-mid);
+    line-height: 1.7;
+    font-weight: 300;
+  }
+
+  /* Filter tabs */
+  .filter-bar {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+    margin-bottom: 2rem;
+    padding-bottom: 1.5rem;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .filter-btn {
+    font-family: 'DM Mono', monospace;
+    font-size: 10.5px;
+    letter-spacing: 1.2px;
+    text-transform: uppercase;
+    padding: 8px 16px;
+    border: 1px solid var(--border);
+    background: white;
+    color: var(--text-mid);
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+
+  .filter-btn:hover, .filter-btn.active {
+    background: var(--green-deep);
+    color: var(--cream);
+    border-color: var(--green-deep);
+  }
+
+  .filter-btn.active { font-weight: 500; }
+
+  /* Search */
+  .search-bar {
+    margin-bottom: 2rem;
+    position: relative;
+  }
+
+  .search-input {
+    width: 100%;
+    font-family: 'DM Mono', monospace;
+    font-size: 13px;
+    padding: 14px 20px 14px 48px;
+    border: 1px solid var(--border);
+    background: white;
+    color: var(--text-dark);
+    outline: none;
+    transition: border-color 0.2s;
+  }
+
+  .search-input:focus { border-color: var(--green-mid); }
+
+  .search-input::placeholder { color: var(--text-light); }
+
+  .search-icon {
+    position: absolute;
+    left: 16px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--text-light);
+    font-size: 16px;
+  }
+
+  /* Table */
+  .var-table-wrap {
+    overflow-x: auto;
+    border: 1px solid var(--border);
+    background: white;
+  }
+
+  .var-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+  }
+
+  .var-table thead {
+    background: var(--green-deep);
+    position: sticky;
+    top: 0;
+  }
+
+  .var-table thead th {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: rgba(247,243,237,0.7);
+    padding: 16px 20px;
+    text-align: left;
+    font-weight: 400;
+    white-space: nowrap;
+  }
+
+  .var-table thead th:first-child { color: var(--gold); }
+
+  .var-table tbody tr {
+    border-bottom: 1px solid var(--green-pale);
+    transition: background 0.15s;
+    cursor: pointer;
+  }
+
+  .var-table tbody tr:hover { background: var(--green-pale); }
+
+  .var-table tbody td {
+    padding: 14px 20px;
+    vertical-align: top;
+    color: var(--text-mid);
+  }
+
+  .var-table .td-key {
+    font-family: 'DM Mono', monospace;
+    font-size: 12px;
+    color: var(--green-deep);
+    font-weight: 500;
+    white-space: nowrap;
+  }
+
+  .var-table .td-name {
+    font-weight: 400;
+    color: var(--text-dark);
+    min-width: 140px;
+  }
+
+  .var-table .td-desc {
+    font-size: 12px;
+    color: var(--text-light);
+    line-height: 1.5;
+    max-width: 320px;
+  }
+
+  .tag {
+    display: inline-block;
+    font-family: 'DM Mono', monospace;
+    font-size: 9.5px;
+    letter-spacing: 0.8px;
+    text-transform: uppercase;
+    padding: 3px 8px;
+    border-radius: 0;
+    font-weight: 400;
+  }
+
+  .tag-family {
+    background: var(--green-pale);
+    color: var(--green-mid);
+    border: 1px solid rgba(74,124,89,0.2);
+  }
+
+  .tag-type-calculated {
+    background: #fff8e8;
+    color: #8a6a00;
+    border: 1px solid rgba(201,168,76,0.3);
+  }
+
+  .tag-type-user_input {
+    background: #f0f4ff;
+    color: #2a45a0;
+    border: 1px solid rgba(42,69,160,0.2);
+  }
+
+  .tag-required {
+    background: var(--green-deep);
+    color: var(--cream);
+  }
+
+  .tag-optional {
+    background: transparent;
+    color: var(--text-light);
+    border: 1px solid var(--border);
+  }
+
+  .table-footer {
+    padding: 14px 20px;
+    background: var(--cream);
+    border-top: 1px solid var(--border);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    color: var(--text-light);
+    letter-spacing: 0.5px;
+  }
+
+  .table-count strong {
+    color: var(--green-deep);
+  }
+
+  /* Load more */
+  .load-more-wrap {
+    text-align: center;
+    margin-top: 2rem;
+  }
+
+  .btn-load-more {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    padding: 12px 32px;
+    border: 1px solid var(--green-deep);
+    background: transparent;
+    color: var(--green-deep);
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+
+  .btn-load-more:hover { background: var(--green-deep); color: var(--cream); }
+
+  /* ── DOWNLOAD CTA ── */
+  .section-download {
+    background: var(--green-deep);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .section-download::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: 
+      radial-gradient(ellipse at 0% 100%, rgba(201,168,76,0.12) 0%, transparent 60%),
+      radial-gradient(ellipse at 100% 0%, rgba(74,124,89,0.2) 0%, transparent 60%);
+  }
+
+  .download-inner {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 8rem 4rem;
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: 6rem;
+    align-items: center;
+    position: relative;
+  }
+
+  .download-title {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(2rem, 4vw, 3.5rem);
+    font-weight: 700;
+    color: var(--cream);
+    line-height: 1.15;
+    margin-bottom: 1.5rem;
+  }
+
+  .download-title em { 
+    font-style: italic;
+    color: var(--gold-light);
+  }
+
+  .download-desc {
+    font-size: 1rem;
+    color: rgba(247,243,237,0.6);
+    line-height: 1.7;
+    font-weight: 300;
+    margin-bottom: 2.5rem;
+    max-width: 500px;
+  }
+
+  .download-cards {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .download-card {
+    border: 1px solid rgba(247,243,237,0.12);
+    padding: 1.5rem 2rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    transition: border-color 0.2s, background 0.2s;
+    text-decoration: none;
+    cursor: pointer;
+    background: rgba(255,255,255,0.02);
+  }
+
+  .download-card:hover {
+    border-color: var(--gold);
+    background: rgba(201,168,76,0.05);
+  }
+
+  .dc-left { flex: 1; }
+
+  .dc-format {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 0.3rem;
+  }
+
+  .dc-label {
+    font-size: 0.85rem;
+    color: rgba(247,243,237,0.5);
+  }
+
+  .dc-arrow {
+    font-size: 1.2rem;
+    color: rgba(247,243,237,0.3);
+    transition: color 0.2s, transform 0.2s;
+  }
+
+  .download-card:hover .dc-arrow {
+    color: var(--gold);
+    transform: translateX(4px);
+  }
+
+  /* ── HOW IT WORKS ── */
+  .section-how {
+    padding: 8rem 4rem;
+    background: var(--cream-dark);
+  }
+
+  .how-inner {
+    max-width: 1400px;
+    margin: 0 auto;
+  }
+
+  .how-header {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 4rem;
+    align-items: end;
+    margin-bottom: 5rem;
+  }
+
+  .how-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 2.8rem;
+    font-weight: 700;
+    color: var(--green-deep);
+  }
+
+  .how-intro {
+    font-size: 1rem;
+    line-height: 1.7;
+    color: var(--text-mid);
+    font-weight: 300;
+  }
+
+  .how-steps {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1px;
+    background: var(--border);
+    border: 1px solid var(--border);
+  }
+
+  .how-step {
+    background: var(--cream);
+    padding: 2.5rem 2rem;
+    position: relative;
+  }
+
+  .how-step-num {
+    font-family: 'Playfair Display', serif;
+    font-size: 4rem;
+    font-weight: 900;
+    color: var(--green-pale);
+    line-height: 1;
+    margin-bottom: 1.5rem;
+  }
+
+  .how-step-title {
+    font-family: 'DM Mono', monospace;
+    font-size: 12px;
+    font-weight: 500;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: var(--green-deep);
+    margin-bottom: 0.8rem;
+  }
+
+  .how-step-desc {
+    font-size: 0.9rem;
+    line-height: 1.65;
+    color: var(--text-mid);
+    font-weight: 300;
+  }
+
+  .how-step-icon {
+    position: absolute;
+    top: 2.5rem;
+    right: 2rem;
+    width: 40px;
+    height: 40px;
+    border: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--green-soft);
+    font-size: 18px;
+  }
+
+  /* ── FOOTER ── */
+  footer {
+    background: #111912;
+    padding: 5rem 4rem 3rem;
+  }
+
+  .footer-inner {
+    max-width: 1400px;
+    margin: 0 auto;
+  }
+
+  .footer-top {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr 1fr;
+    gap: 4rem;
+    margin-bottom: 4rem;
+    padding-bottom: 3rem;
+    border-bottom: 1px solid rgba(247,243,237,0.08);
+  }
+
+  .footer-brand-name {
+    font-family: 'Playfair Display', serif;
+    font-size: 2rem;
+    font-weight: 900;
+    color: var(--cream);
+    margin-bottom: 0.5rem;
+  }
+
+  .footer-brand-sub {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 1.5rem;
+  }
+
+  .footer-brand-desc {
+    font-size: 0.85rem;
+    line-height: 1.7;
+    color: rgba(247,243,237,0.35);
+    font-weight: 300;
+    max-width: 280px;
+  }
+
+  .footer-col-title {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: rgba(247,243,237,0.35);
+    margin-bottom: 1.5rem;
+  }
+
+  .footer-links {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 0.7rem;
+  }
+
+  .footer-links a {
+    font-size: 0.9rem;
+    color: rgba(247,243,237,0.5);
+    text-decoration: none;
+    transition: color 0.2s;
+  }
+
+  .footer-links a:hover { color: var(--cream); }
+
+  .footer-bottom {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .footer-legal {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 1px;
+    color: rgba(247,243,237,0.2);
+  }
+
+  .footer-partners {
+    display: flex;
+    gap: 2rem;
+    align-items: center;
+  }
+
+  .footer-partner-name {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: rgba(247,243,237,0.25);
+    transition: color 0.2s;
+  }
+
+  .footer-partner-name:hover { color: rgba(247,243,237,0.5); }
+
+  /* ── ANIMATIONS ── */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  @keyframes marquee {
+    from { transform: translateX(0); }
+    to { transform: translateX(-50%); }
+  }
+
+  /* Scroll reveal */
+  .reveal {
+    opacity: 0;
+    transform: translateY(24px);
+    transition: opacity 0.7s ease, transform 0.7s ease;
+  }
+
+  .reveal.visible {
+    opacity: 1;
+    transform: none;
+  }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 1024px) {
+    .hero { grid-template-columns: 1fr; min-height: auto; }
+    .hero-left { padding: 5rem 2.5rem 4rem; }
+    .hero-right { padding: 3rem 2.5rem 4rem; }
+    .orgs-grid { grid-template-columns: 1fr; }
+    .how-steps { grid-template-columns: 1fr 1fr; }
+    .variables-header { grid-template-columns: 1fr; gap: 1.5rem; }
+    .download-inner { grid-template-columns: 1fr; gap: 3rem; }
+    .footer-top { grid-template-columns: 1fr 1fr; gap: 2.5rem; }
+    nav { padding: 0 1.5rem; }
+    .nav-links { display: none; }
+    .section-variables { padding: 4rem 1.5rem; }
+    .section-orgs { padding: 5rem 2rem; }
+    .section-how { padding: 5rem 2rem; }
+    .how-header { grid-template-columns: 1fr; gap: 1.5rem; }
+    .download-inner { padding: 5rem 2rem; }
+  }
+
+  /* ── MOBILE (phones) ── */
+  @media (max-width: 768px) {
+    /* Nav */
+    nav { padding: 0 1.25rem; height: 60px; }
+
+    /* Hero */
+    .hero { grid-template-columns: 1fr; }
+    .hero-left { padding: 4rem 1.5rem 3rem; }
+    .hero-left::after { font-size: 100px; bottom: -30px; }
+    .hero-right { padding: 2.5rem 1.5rem 3rem; }
+    .hero-title { font-size: 2.4rem; }
+    .hero-subtitle { font-size: 0.95rem; }
+    .hero-stat-grid { grid-template-columns: 1fr 1fr; }
+
+    /* About — kill sticky, stack vertically */
+    .section-about {
+      display: flex !important;
+      flex-direction: column !important;
+      gap: 2rem !important;
+      padding: 3.5rem 1.5rem !important;
+    }
+    .about-sticky {
+      position: static !important;
+    }
+    .about-title { font-size: 2rem; }
+    .about-content p { font-size: 1rem; }
+    .about-pull-quote { font-size: 1.2rem; margin: 1.5rem 0; }
+
+    /* Orgs */
+    .section-orgs { padding: 3.5rem 1.5rem; }
+    .orgs-grid { grid-template-columns: 1fr; }
+    .orgs-header { flex-direction: column; align-items: flex-start; gap: 0.5rem; }
+    .orgs-title { font-size: 1.8rem; }
+    .org-card { padding: 2rem 1.5rem; }
+
+    /* Variables */
+    .section-variables { padding: 3.5rem 1.25rem; }
+    .variables-title { font-size: 1.8rem; }
+    .filter-bar { gap: 0.4rem; }
+    .filter-btn { font-size: 9.5px; padding: 7px 11px; }
+    /* On mobile, hide less important table columns */
+    .var-table .td-desc,
+    .var-table thead th:nth-child(7),
+    .var-table tbody td:nth-child(7) { display: none; }
+    .var-table thead th:nth-child(5),
+    .var-table tbody td:nth-child(5) { display: none; }
+
+    /* How it works */
+    .how-steps { grid-template-columns: 1fr; }
+    .how-title { font-size: 1.8rem; }
+
+    /* Download */
+    .download-inner { padding: 3.5rem 1.5rem; gap: 2.5rem; }
+    .download-title { font-size: 2rem; }
+
+    /* Footer */
+    .footer-top { grid-template-columns: 1fr; gap: 2rem; padding: 3.5rem 1.5rem 0; }
+    footer { padding: 0 0 2rem; }
+    .footer-inner { padding: 0; }
+    .footer-top { padding: 3rem 1.5rem 2rem; }
+    .footer-bottom { flex-direction: column; gap: 1rem; text-align: center; padding: 0 1.5rem; }
+  }
+
+  @media (max-width: 480px) {
+    .hero-title { font-size: 2rem; }
+    .hero-actions { flex-direction: column; }
+    .btn-primary, .btn-secondary { width: 100%; justify-content: center; }
+    .org-badge { font-size: 12px; padding: 8px 14px; }
+    .how-step { padding: 2rem 1.25rem; }
+    .footer-legal { font-size: 9px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-logo">
+    <div class="nav-logo-badge">EA</div>
+    <span class="nav-logo-text">ENVAA</span>
+  </div>
+  <ul class="nav-links">
+    <li><a href="#about">El Estándar</a></li>
+    <li><a href="#organizaciones">Organizaciones</a></li>
+    <li><a href="#variables">Variables</a></li>
+    <li><a href="#adoptar">Cómo adoptarlo</a></li>
+    <li><a href="#download" class="nav-cta">Descargar</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-left">
+    <div class="hero-eyebrow">Iniciativa Nacional · Argentina</div>
+    <h1 class="hero-title">
+      Estándar Nacional de Variables <em>Agronómicas Argentinas</em>
+    </h1>
+    <p class="hero-subtitle">
+      El primer lenguaje común para el agro argentino. Variables unificadas, 
+      documentación abierta y adopción libre para toda la cadena agroalimentaria.
+    </p>
+    <div class="hero-actions">
+      <a href="#variables" class="btn-primary">
+        <span>Explorar variables</span>
+        <span>↓</span>
+      </a>
+      <a href="#download" class="btn-secondary">
+        <span>Descargar diccionario</span>
+        <span>↗</span>
+      </a>
+    </div>
+  </div>
+  <div class="hero-right">
+    <div class="hero-stat-grid">
+      <div class="hero-stat">
+        <div class="hero-stat-num">182</div>
+        <div class="hero-stat-label">Variables estandarizadas</div>
+      </div>
+      <div class="hero-stat">
+        <div class="hero-stat-num">13</div>
+        <div class="hero-stat-label">Módulos temáticos</div>
+      </div>
+      <div class="hero-stat">
+        <div class="hero-stat-num">3</div>
+        <div class="hero-stat-label">Organizaciones fundadoras</div>
+      </div>
+      <div class="hero-stat">
+        <div class="hero-stat-num">302</div>
+        <div class="hero-stat-label">Campos de origen mapeados</div>
+      </div>
+      <div class="hero-stat">
+        <div class="hero-stat-num">∞</div>
+        <div class="hero-stat-label">Adopción libre y gratuita</div>
+      </div>
+    </div>
+    <div class="hero-org-logos">
+      <div class="org-logos-label">Impulsado por</div>
+      <div class="org-logos-row">
+        <div class="org-badge">AAPRESID</div>
+        <div class="org-badge">SRA</div>
+        <div class="org-badge">CREA</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- MARQUEE -->
+<div class="marquee-strip">
+  <div class="marquee-inner">
+    <span class="marquee-item">production_system</span>
+    <span class="marquee-item">·</span>
+    <span class="marquee-item"><strong>rendimiento</strong></span>
+    <span class="marquee-item">·</span>
+    <span class="marquee-item">fertilización</span>
+    <span class="marquee-item">·</span>
+    <span class="marquee-item"><strong>densidad</strong></span>
+    <span class="marquee-item">·</span>
+    <span class="marquee-item">crop_rotation</span>
+    <span class="marquee-item">·</span>
+    <span class="marquee-item"><strong>genética</strong></span>
+    <span class="marquee-item">·</span>
+    <span class="marquee-item">soil_properties</span>
+    <span class="marquee-item">·</span>
+    <span class="marquee-item"><strong>adversidades</strong></span>
+    <span class="marquee-item">·</span>
+    <span class="marquee-item">irrigation</span>
+    <span class="marquee-item">·</span>
+    <span class="marquee-item"><strong>antecesor</strong></span>
+    <span class="marquee-item">·</span>
+    <span class="marquee-item">crop_protection</span>
+    <span class="marquee-item">·</span>
+    <span class="marquee-item"><strong>sembrada_ha</strong></span>
+    <span class="marquee-item">·</span>
+    <span class="marquee-item">nutrition_fertilization</span>
+    <span class="marquee-item">·</span>
+    <span class="marquee-item"><strong>campaña</strong></span>
+    <span class="marquee-item">·</span>
+    <!-- duplicate for seamless loop -->
+    <span class="marquee-item">production_system</span>
+    <span class="marquee-item">·</span>
+    <span class="marquee-item"><strong>rendimiento</strong></span>
+    <span class="marquee-item">·</span>
+    <span class="marquee-item">fertilización</span>
+    <span class="marquee-item">·</span>
+    <span class="marquee-item"><strong>densidad</strong></span>
+    <span class="marquee-item">·</span>
+    <span class="marquee-item">crop_rotation</span>
+    <span class="marquee-item">·</span>
+    <span class="marquee-item"><strong>genética</strong></span>
+    <span class="marquee-item">·</span>
+    <span class="marquee-item">soil_properties</span>
+    <span class="marquee-item">·</span>
+    <span class="marquee-item"><strong>adversidades</strong></span>
+    <span class="marquee-item">·</span>
+    <span class="marquee-item">irrigation</span>
+    <span class="marquee-item">·</span>
+    <span class="marquee-item"><strong>antecesor</strong></span>
+    <span class="marquee-item">·</span>
+    <span class="marquee-item">crop_protection</span>
+    <span class="marquee-item">·</span>
+    <span class="marquee-item"><strong>sembrada_ha</strong></span>
+    <span class="marquee-item">·</span>
+    <span class="marquee-item">nutrition_fertilization</span>
+    <span class="marquee-item">·</span>
+    <span class="marquee-item"><strong>campaña</strong></span>
+    <span class="marquee-item">·</span>
+  </div>
+</div>
+
+<!-- ABOUT -->
+<div style="background: var(--cream);">
+<section class="section-about" id="about">
+  <div class="about-sticky">
+    <div class="section-label">El Estándar</div>
+    <h2 class="about-title">Un idioma <em>común</em> para todo el agro</h2>
+  </div>
+  <div class="about-content reveal">
+    <p>
+      El agro argentino genera millones de datos por campaña. Pero durante décadas, 
+      cada organización, empresa tecnológica y laboratorio habló su propio idioma: 
+      variables con distintos nombres, formatos y criterios que imposibilitaban 
+      comparar, integrar y escalar la información.
+    </p>
+    <p>
+      <strong>AAPRESID, la Sociedad Rural Argentina (SRA) y CREA</strong> decidieron 
+      cambiar eso. Tres instituciones con décadas de historia, millones de hectáreas 
+      relevadas y miles de productores, unidas para definir el primer diccionario 
+      compartido de variables agronómicas de Argentina.
+    </p>
+    <div class="about-pull-quote">
+      "Lo que no se nombra igual, no se puede medir junto. Y lo que no se mide junto, 
+      no se puede mejorar a escala."
+    </div>
+    <p>
+      El <strong>Estándar Nacional de Variables Agronómicas Argentinas (ENVAA)</strong> es de acceso 
+      público, libre de uso y diseñado para que cualquier actor del ecosistema — 
+      startups agtech, corporaciones, biotecnología, laboratorios, organismos públicos — 
+      pueda adoptarlo sin barreras. Cuantos más lo usen, más potente se vuelve el dato argentino.
+    </p>
+    <p>
+      El estándar ya está vivo: cada variable tiene su nombre clave en inglés 
+      (<code style="font-family:'DM Mono',monospace;font-size:0.85em;background:var(--green-pale);padding:2px 6px;color:var(--green-mid);">variable_key</code>), 
+      su nombre legible, familia temática, tipo de dato, unidad, fuente y descripción. 
+      Listo para integrarse a cualquier sistema.
+    </p>
+  </div>
+</section>
+</div>
+
+<!-- ORGANIZATIONS -->
+<section class="section-orgs" id="organizaciones">
+  <div class="orgs-inner">
+    <div class="orgs-header reveal">
+      <div>
+        <div class="section-label" style="color:var(--gold)">Organizaciones fundadoras</div>
+        <h2 class="orgs-title">Las tres instituciones que lo hacen posible</h2>
+      </div>
+      <div class="orgs-count">03 instituciones · Argentina</div>
+    </div>
+    <div class="orgs-grid reveal">
+      <div class="org-card">
+        <div class="org-card-number">01</div>
+        <div class="org-card-name">AAPRESID</div>
+        <div class="org-card-fullname">Asociación Argentina de Productores en Siembra Directa</div>
+        <p class="org-card-desc">
+          Pionera en la sistematización de datos agronómicos a escala nacional, 
+          AAPRESID aportó la base metodológica del estándar y la primera versión 
+          del diccionario de variables, producto de años de benchmarking con sus asociados.
+        </p>
+        <span class="org-card-tag">Origen del dataset</span>
+      </div>
+      <div class="org-card">
+        <div class="org-card-number">02</div>
+        <div class="org-card-name">SRA</div>
+        <div class="org-card-fullname">Sociedad Rural Argentina</div>
+        <p class="org-card-desc">
+          Con más de 150 años representando al sector productivo argentino, la SRA 
+          suma su legitimidad institucional y la diversidad de productores que nuclea, 
+          garantizando que el estándar refleje la realidad de todo el país.
+        </p>
+        <span class="org-card-tag">Validación institucional</span>
+      </div>
+      <div class="org-card">
+        <div class="org-card-number">03</div>
+        <div class="org-card-name">CREA</div>
+        <div class="org-card-fullname">Consorcios Regionales de Experimentación Agrícola</div>
+        <p class="org-card-desc">
+          CREA aporta su red de grupos regionales y décadas de datos de experimentación 
+          colaborativa. Su diccionario de variables —con más de 200 campos estructurados— 
+          es una de las referencias técnicas centrales del ENVAA.
+        </p>
+        <span class="org-card-tag">Referencia técnica</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- VARIABLES EXPLORER -->
+<section class="section-variables" id="variables">
+  <div class="variables-header reveal">
+    <div>
+      <div class="section-label">Diccionario público</div>
+      <h2 class="variables-title">Explorar las variables del estándar</h2>
+    </div>
+    <p class="variables-intro">
+      Cada variable está documentada con su clave técnica, familia temática, 
+      tipo de dato, unidad de medida y descripción. Filtrá por categoría o 
+      buscá por nombre. Todo de acceso libre.
+    </p>
+  </div>
+
+  <div class="search-bar reveal">
+    <span class="search-icon">⌕</span>
+    <input class="search-input" type="text" placeholder="Buscar variable... ej: rendimiento, densidad, fertilización" id="searchInput">
+  </div>
+
+  <div class="filter-bar reveal" id="filterBar">
+    <button class="filter-btn active" data-family="all">Todas</button>
+    <button class="filter-btn" data-family="adversidades">Adversidades</button>
+    <button class="filter-btn" data-family="agua_riego">Agua y Riego</button>
+    <button class="filter-btn" data-family="ambiente_suelo">Ambiente y Suelo</button>
+    <button class="filter-btn" data-family="clima_precipitaciones">Clima</button>
+    <button class="filter-btn" data-family="cosecha_resultados_calidad">Cosecha y Calidad</button>
+    <button class="filter-btn" data-family="fertilizacion_nutricion">Fertilización</button>
+    <button class="filter-btn" data-family="identidad_ubicacion">Identidad y Ubicación</button>
+    <button class="filter-btn" data-family="implantacion">Implantación</button>
+    <button class="filter-btn" data-family="indicadores_calculados">Indicadores</button>
+    <button class="filter-btn" data-family="manejo_especifico_cultivo">Manejo Específico</button>
+    <button class="filter-btn" data-family="proteccion_cultivo">Protección</button>
+    <button class="filter-btn" data-family="sistema_cultivo_rotacion">Sistema y Rotación</button>
+  </div>
+
+  <div class="var-table-wrap reveal">
+    <table class="var-table" id="varTable">
+      <thead>
+        <tr>
+          <th>Variable Key</th>
+          <th>Nombre</th>
+          <th>Familia</th>
+          <th>Tipo</th>
+          <th>Unidad</th>
+          <th>Estado</th>
+          <th>Descripción</th>
+        </tr>
+      </thead>
+      <tbody id="tableBody"></tbody>
+    </table>
+    <div class="table-footer">
+      <span class="table-count" id="tableCount">Mostrando <strong>0</strong> variables</span>
+      <span style="font-family:'DM Mono',monospace;font-size:10px;color:var(--text-light)">ENVAA · Diccionario v1.0</span>
+    </div>
+  </div>
+  <div class="load-more-wrap" id="loadMoreWrap" style="display:none">
+    <button class="btn-load-more" id="loadMoreBtn">Cargar más variables →</button>
+  </div>
+</section>
+
+<!-- HOW IT WORKS -->
+<section class="section-how" id="adoptar">
+  <div class="how-inner">
+    <div class="how-header reveal">
+      <div>
+        <div class="section-label">Adopción</div>
+        <h2 class="how-title">Cómo adoptar el estándar</h2>
+      </div>
+      <p class="how-intro">
+        Adoptar el ENVAA no requiere membresía ni costo alguno. Es un compromiso 
+        voluntario de usar las mismas claves y definiciones en tus sistemas, 
+        reportes e intercambios de datos.
+      </p>
+    </div>
+    <div class="how-steps reveal">
+      <div class="how-step">
+        <div class="how-step-icon">⬇</div>
+        <div class="how-step-num">01</div>
+        <div class="how-step-title">Descargá el diccionario</div>
+        <p class="how-step-desc">
+          Accedé gratuitamente al diccionario completo en formato CSV, JSON o Excel. 
+          Más de 200 variables documentadas, listas para usar.
+        </p>
+      </div>
+      <div class="how-step">
+        <div class="how-step-icon">⟳</div>
+        <div class="how-step-num">02</div>
+        <div class="how-step-title">Mapeá tus variables</div>
+        <p class="how-step-desc">
+          Identificá qué variables de tu sistema corresponden a las del estándar 
+          y comenzá a mapear. No es necesario adoptar el 100% desde el inicio.
+        </p>
+      </div>
+      <div class="how-step">
+        <div class="how-step-icon">✓</div>
+        <div class="how-step-num">03</div>
+        <div class="how-step-title">Implementá las claves</div>
+        <p class="how-step-desc">
+          Usá los <code style="font-family:'DM Mono',monospace;font-size:0.85em">variable_key</code> del ENVAA 
+          en tus APIs, bases de datos y reportes. Las definiciones y unidades 
+          ya están documentadas.
+        </p>
+      </div>
+      <div class="how-step">
+        <div class="how-step-icon">⊕</div>
+        <div class="how-step-num">04</div>
+        <div class="how-step-title">Sumá tu organización</div>
+        <p class="how-step-desc">
+          Anunciá públicamente tu adopción del estándar y contribuí con propuestas 
+          de nuevas variables. El ENVAA crece con la comunidad.
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- DOWNLOAD CTA -->
+<section class="section-download" id="download">
+  <div class="download-inner">
+    <div>
+      <div class="section-label" style="color:var(--gold)">Acceso abierto</div>
+      <h2 class="download-title">
+        El dato argentino, <em>finalmente unificado</em>
+      </h2>
+      <p class="download-desc">
+        Descargá el diccionario completo del ENVAA en el formato que necesitás. 
+        Sin registro, sin costos, sin restricciones. Una sola condición: usar 
+        las mismas variables que el resto del agro.
+      </p>
+      <div style="display:flex;gap:1rem;flex-wrap:wrap">
+        <a href="#" class="btn-primary" onclick="downloadCSV()">
+          <span>Descargar CSV</span>
+          <span>↓</span>
+        </a>
+        <a href="#" class="btn-secondary" onclick="downloadJSON()">
+          <span>Descargar JSON</span>
+          <span>↓</span>
+        </a>
+      </div>
+    </div>
+    <div class="download-cards">
+      <div class="download-card" onclick="downloadCSV()">
+        <div class="dc-left">
+          <div class="dc-format">CSV</div>
+          <div class="dc-label">Compatible con Excel, Google Sheets, Python, R</div>
+        </div>
+        <div class="dc-arrow">→</div>
+      </div>
+      <div class="download-card" onclick="downloadJSON()">
+        <div class="dc-left">
+          <div class="dc-format">JSON</div>
+          <div class="dc-label">Para integraciones de API y sistemas de datos</div>
+        </div>
+        <div class="dc-arrow">→</div>
+      </div>
+      <div class="download-card">
+        <div class="dc-left">
+          <div class="dc-format">XLSX</div>
+          <div class="dc-label">Próximamente disponible</div>
+        </div>
+        <div class="dc-arrow" style="opacity:0.3">—</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-inner">
+    <div class="footer-top">
+      <div>
+        <div class="footer-brand-name">ENVAA</div>
+        <div class="footer-brand-sub">Estándar Nacional de Variables Agronómicas Argentinas</div>
+        <p class="footer-brand-desc">
+          Iniciativa pública impulsada por AAPRESID, SRA y CREA para unificar 
+          el lenguaje del agro argentino. De acceso libre y adopción voluntaria.
+        </p>
+      </div>
+      <div>
+        <div class="footer-col-title">Estándar</div>
+        <ul class="footer-links">
+          <li><a href="#variables">Diccionario de variables</a></li>
+          <li><a href="#about">¿Qué es el ENVAA?</a></li>
+          <li><a href="#adoptar">Cómo adoptarlo</a></li>
+          <li><a href="#download">Descargar</a></li>
+        </ul>
+      </div>
+      <div>
+        <div class="footer-col-title">Organizaciones</div>
+        <ul class="footer-links">
+          <li><a href="#">AAPRESID</a></li>
+          <li><a href="#">SRA</a></li>
+          <li><a href="#">CREA</a></li>
+        </ul>
+      </div>
+      <div>
+        <div class="footer-col-title">Comunidad</div>
+        <ul class="footer-links">
+          <li><a href="#">Proponer variable</a></li>
+          <li><a href="#">Anunciar adopción</a></li>
+          <li><a href="#">Documentación técnica</a></li>
+          <li><a href="#">Contacto</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <div class="footer-legal">© 2025 ENVAA · Estándar Nacional de Variables Agronómicas Argentinas · Acceso público y libre</div>
+      <div class="footer-partners">
+        <span class="footer-partner-name">AAPRESID</span>
+        <span style="color:rgba(247,243,237,0.1)">·</span>
+        <span class="footer-partner-name">SRA</span>
+        <span style="color:rgba(247,243,237,0.1)">·</span>
+        <span class="footer-partner-name">CREA</span>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script>
+// ── DATA (from CREA dataset) ──
+const ALL_VARIABLES = [
+  { key: 'anegamiento_presencia', name: 'Anegamiento Presencia', family: 'adversidades', sub: 'evento', type: 'enum', unit: '—', required: true, source: 'user_input', desc: 'Identifica si la unidad de manejo fue afectada o no por la adversidad anegamiento % daño' },
+  { key: 'enfermedad_presencia', name: 'Enfermedad Presencia', family: 'adversidades', sub: 'evento', type: 'enum', unit: '—', required: true, source: 'user_input', desc: 'Identifica si la unidad de manejo fue afectada o no por la adversidad enfermedad' },
+  { key: 'fuego_presencia', name: 'Fuego Presencia', family: 'adversidades', sub: 'evento', type: 'enum', unit: '—', required: true, source: 'user_input', desc: 'Identifica si la unidad de manejo fue afectada o no por la adversidad fuego' },
+  { key: 'granizo_presencia', name: 'Granizo Presencia', family: 'adversidades', sub: 'evento', type: 'enum', unit: '—', required: true, source: 'user_input', desc: 'Identifica si la unidad de manejo fue afectada o no por la adversidad granizo' },
+  { key: 'helada_presencia', name: 'Helada Presencia', family: 'adversidades', sub: 'evento', type: 'enum', unit: '—', required: true, source: 'user_input', desc: 'Identifica si la unidad de manejo fue afectada o no por la adversidad helada' },
+  { key: 'maleza_presencia', name: 'Maleza Presencia', family: 'adversidades', sub: 'evento', type: 'enum', unit: '—', required: true, source: 'user_input', desc: 'Identifica si la unidad de manejo fue afectada o no por la adversidad maleza' },
+  { key: 'plaga_presencia', name: 'Plaga Presencia', family: 'adversidades', sub: 'evento', type: 'enum', unit: '—', required: true, source: 'user_input', desc: 'Identifica si la unidad de manejo fue afectada o no por la adversidad plaga' },
+  { key: 'sequia_presencia', name: 'Sequia Presencia', family: 'adversidades', sub: 'evento', type: 'enum', unit: '—', required: true, source: 'user_input', desc: 'Identifica si la unidad de manejo fue afectada o no por la adversidad sequia' },
+  { key: 'vuelco_presencia', name: 'Vuelco Presencia', family: 'adversidades', sub: 'evento', type: 'enum', unit: '—', required: true, source: 'user_input', desc: 'Identifica si la unidad de manejo fue afectada o no por la adversidad vuelco' },
+  { key: 'anegamiento_danio_pct', name: 'Anegamiento Danio Pct', family: 'adversidades', sub: 'impacto', type: 'number', unit: '%', required: true, source: 'user_input', desc: 'Porcentaje de afección al rendimiento que ocasionó la adversidad anegamiento' },
+  { key: 'enfermedad_danio_pct', name: 'Enfermedad Danio Pct', family: 'adversidades', sub: 'impacto', type: 'number', unit: '%', required: true, source: 'user_input', desc: 'Porcentaje de afección al rendimiento que ocasionó la adversidad enfermedad' },
+  { key: 'fuego_danio_pct', name: 'Fuego Danio Pct', family: 'adversidades', sub: 'impacto', type: 'number', unit: '%', required: true, source: 'user_input', desc: 'Porcentaje de afección al rendimiento que ocasionó la adversidad fuego' },
+  { key: 'granizo_danio_pct', name: 'Granizo Danio Pct', family: 'adversidades', sub: 'impacto', type: 'number', unit: '%', required: true, source: 'user_input', desc: 'Porcentaje de afección al rendimiento que ocasionó la adversidad granizo' },
+  { key: 'helada_danio_pct', name: 'Helada Danio Pct', family: 'adversidades', sub: 'impacto', type: 'number', unit: '%', required: true, source: 'user_input', desc: 'Porcentaje de afección al rendimiento que ocasionó la adversidad helada' },
+  { key: 'maleza_danio_pct', name: 'Maleza Danio Pct', family: 'adversidades', sub: 'impacto', type: 'number', unit: '%', required: true, source: 'user_input', desc: 'Porcentaje de afección al rendimiento que ocasionó la adversidad maleza Adversidad' },
+  { key: 'plaga_danio_pct', name: 'Plaga Danio Pct', family: 'adversidades', sub: 'impacto', type: 'number', unit: '%', required: true, source: 'user_input', desc: 'Porcentaje de afección al rendimiento que ocasionó la adversidad plaga' },
+  { key: 'sequia_danio_pct', name: 'Sequia Danio Pct', family: 'adversidades', sub: 'impacto', type: 'number', unit: '%', required: true, source: 'user_input', desc: 'Porcentaje de afección al rendimiento que ocasionó la adversidad sequia' },
+  { key: 'vuelco_danio_pct', name: 'Vuelco Danio Pct', family: 'adversidades', sub: 'impacto', type: 'number', unit: '%', required: true, source: 'user_input', desc: 'Porcentaje de afección al rendimiento que ocasionó la adversidad vuelco' },
+  { key: 'maleza_principal', name: 'Maleza Principal', family: 'adversidades', sub: 'malezas', type: 'enum', unit: '—', required: false, source: 'user_input', desc: 'Nombre de la especie de la maleza principal con la que tuvo dificultad para el control en ese lote.' },
+  { key: 'maleza_problema', name: 'Maleza Problema', family: 'adversidades', sub: 'malezas', type: 'enum', unit: '—', required: false, source: 'user_input', desc: 'Identifica si la unidad de manejo tuvo o no tuvo dificultades para controlar' },
+  { key: 'maleza_secundaria', name: 'Maleza Secundaria', family: 'adversidades', sub: 'malezas', type: 'enum', unit: '—', required: false, source: 'user_input', desc: 'Nombre de la especie de la maleza secundaria con la que tuvo dificultad para el control en ese lote.' },
+  { key: 'maleza_terciaria', name: 'Maleza Terciaria', family: 'adversidades', sub: 'malezas', type: 'enum', unit: '—', required: false, source: 'user_input', desc: 'Nombre de la especie de la maleza terciariacon la que tuvo dificultad para el control en ese lote.' },
+  { key: 'agua_util_inicial_mm', name: 'Agua Util Inicial Mm', family: 'agua_riego', sub: 'agua_suelo', type: 'number', unit: 'mm', required: false, source: 'user_input', desc: 'Agua útil del perfil del suelo en mm al momento de la siembra Profundidad de la' },
+  { key: 'influencia_napa', name: 'Influencia Napa', family: 'agua_riego', sub: 'agua_suelo', type: 'enum', unit: '—', required: true, source: 'user_input', desc: 'Identifica si la unidad de manejo posee o no posee influencia de napa acuífera Prof. Napa a la' },
+  { key: 'profundidad_medicion_agua_util_m', name: 'Profundidad Medicion Agua Util M', family: 'agua_riego', sub: 'agua_suelo', type: 'number', unit: 'm', required: false, source: 'user_input', desc: 'Profundidad a la cuál se determinó el valor de agua útil informada en “Agua al inicio”' },
+  { key: 'profundidad_napa_siembra_m', name: 'Profundidad Napa Siembra M', family: 'agua_riego', sub: 'agua_suelo', type: 'number', unit: 'm', required: false, source: 'user_input', desc: 'Profundidad de napa al momento de la siembra expresada en metros' },
+  { key: 'lamina_riego_mm', name: 'Lamina Riego Mm', family: 'agua_riego', sub: 'riego', type: 'number', unit: 'mm', required: false, source: 'user_input', desc: 'Cantidad de milímetros aplicados para obtener la producción del cultivo informado Calidad del' },
+  { key: 'riego', name: 'Riego', family: 'agua_riego', sub: 'riego', type: 'enum', unit: '—', required: true, source: 'user_input', desc: 'Identifica si la unidad de manejo posee o no posee riego artificial.' },
+  { key: 'sistema_riego', name: 'Sistema Riego', family: 'agua_riego', sub: 'riego', type: 'enum', unit: '—', required: true, source: 'user_input', desc: 'Tipo de riego, en aquellos casos que sí lo tenga.' },
+  { key: 'ambiente_salino', name: 'Ambiente Salino', family: 'ambiente_suelo', sub: 'clasificacion_suelo', type: 'enum', unit: '—', required: false, source: 'user_input', desc: 'Identifica si la unidad de manejo posee o no posee condiciones de salinidad para los cultivos Nivel de' },
+  { key: 'capacidad_uso_suelo', name: 'Capacidad Uso Suelo', family: 'ambiente_suelo', sub: 'clasificacion_suelo', type: 'enum', unit: '—', required: false, source: 'user_input', desc: 'Clasificación de los suelos en función de su aptitud productiva y su riesgo de degradación' },
+  { key: 'profundidad_tosca_m', name: 'Profundidad Tosca M', family: 'ambiente_suelo', sub: 'clasificacion_suelo', type: 'number', unit: 'm', required: false, source: 'user_input', desc: 'Profundidad a la cuál se encuentra la tosca, expresada en metros' },
+  { key: 'serie_suelo', name: 'Serie Suelo', family: 'ambiente_suelo', sub: 'clasificacion_suelo', type: 'enum', unit: '—', required: false, source: 'user_input', desc: 'Serie de suelo que predomina en el lote' },
+  { key: 'suelo_sistematizado', name: 'Suelo Sistematizado', family: 'ambiente_suelo', sub: 'clasificacion_suelo', type: 'enum', unit: '—', required: false, source: 'user_input', desc: 'Sistematización que corresponda en caso de que el lote esté sistematizado Profundidad de' },
+  { key: 'tipo_suelo', name: 'Tipo Suelo', family: 'ambiente_suelo', sub: 'clasificacion_suelo', type: 'enum', unit: '—', required: false, source: 'user_input', desc: 'Tipo de suelo que predomina en el lote' },
+  { key: 'azufre_suelo_ppm', name: 'Azufre Suelo Ppm', family: 'ambiente_suelo', sub: 'fertilidad_suelo', type: 'number', unit: 'ppm', required: false, source: 'user_input', desc: 'Cantidad de azufre en los primeros 20 cm de profundidad del suelo, expresado en partes por millón' },
+  { key: 'fosforo_suelo_0_20_ppm', name: 'Fosforo Suelo 0 20 Ppm', family: 'ambiente_suelo', sub: 'fertilidad_suelo', type: 'number', unit: 'ppm', required: false, source: 'user_input', desc: 'Cantidad de fósforo en los primeros 20 cm de profundidad del suelo, expresado en partes por millón' },
+  { key: 'materia_organica_joven_pct', name: 'Materia Organica Joven Pct', family: 'ambiente_suelo', sub: 'fertilidad_suelo', type: 'number', unit: '%', required: false, source: 'user_input', desc: 'Toneladas por hectáreas de material organico joven en los primeros 20 cm de suelo' },
+  { key: 'materia_organica_pct', name: 'Materia Organica Pct', family: 'ambiente_suelo', sub: 'fertilidad_suelo', type: 'number', unit: '%', required: false, source: 'user_input', desc: 'Toneladas por hectáreas de material orgánico en los primeros 20 cm de suelo.' },
+  { key: 'n_no3_0_20_ppm', name: 'N No3 0 20 Ppm', family: 'ambiente_suelo', sub: 'fertilidad_suelo', type: 'number', unit: 'ppm', required: false, source: 'user_input', desc: 'Cantidad de nitrógeno de nitratos en los primeros 20 cm de profundidad del suelo, expresado en partes por millón' },
+  { key: 'n_no3_20_40_ppm', name: 'N No3 20 40 Ppm', family: 'ambiente_suelo', sub: 'fertilidad_suelo', type: 'number', unit: 'ppm', required: false, source: 'user_input', desc: 'Cantidad de nitrógeno de nitratos ubicados entre los 20 y 40 cm de profundidad del suelo, expresado en partes por millón' },
+  { key: 'n_no3_40_60_ppm', name: 'N No3 40 60 Ppm', family: 'ambiente_suelo', sub: 'fertilidad_suelo', type: 'number', unit: 'ppm', required: false, source: 'user_input', desc: 'Cantidad de nitrógeno de nitratos ubicados entre los 40 y 60 cm de profundidad del suelo, expresado en partes por millón' },
+  { key: 'otro_nutriente_ppm', name: 'Otro Nutriente Ppm', family: 'ambiente_suelo', sub: 'fertilidad_suelo', type: 'number', unit: 'ppm', required: false, source: 'user_input', desc: 'Contenido del nutriente seleccionado en “Otro nutriente”, expresado en partes por millón. Precipitaciones' },
+  { key: 'otro_nutriente_suelo', name: 'Otro Nutriente Suelo', family: 'ambiente_suelo', sub: 'fertilidad_suelo', type: 'enum', unit: '—', required: false, source: 'user_input', desc: 'Otro nutriente analizado. Disponibilidad' },
+  { key: 'ph_suelo', name: 'Ph Suelo', family: 'ambiente_suelo', sub: 'fertilidad_suelo', type: 'number', unit: '—', required: false, source: 'user_input', desc: 'Determina la actividad de los iones hidrógeno en la solución del suelo en sus primeros 20 cm' },
+  { key: 'arcilla_pct', name: 'Arcilla Pct', family: 'ambiente_suelo', sub: 'textura_suelo', type: 'number', unit: '%', required: false, source: 'user_input', desc: 'Contenido de arcilla del suelo, expresado en porcentaje' },
+  { key: 'arena_pct', name: 'Arena Pct', family: 'ambiente_suelo', sub: 'textura_suelo', type: 'number', unit: '%', required: false, source: 'user_input', desc: 'Contenido de arena del suelo, expresado en porcentaje' },
+  { key: 'limo_pct', name: 'Limo Pct', family: 'ambiente_suelo', sub: 'textura_suelo', type: 'number', unit: '%', required: false, source: 'user_input', desc: 'Contenido de limo del suelo, expresado en porcentaje' },
+  { key: 'precipitacion_campania_mm', name: 'Precipitacion Campania Mm', family: 'clima_precipitaciones', sub: 'precipitacion_mensual', type: 'number', unit: 'mm', required: false, source: 'user_input', desc: 'Precipitaciones acumuladas en toda la campaña, siendo la sumatoria de las lluvias informadas en cada mes.' },
+  { key: 'precipitacion_mensual_mm', name: 'Precipitacion Mensual Mm', family: 'clima_precipitaciones', sub: 'precipitacion_mensual', type: 'number', unit: 'mm', required: false, source: 'user_input', desc: 'Precipitaciones registradas en el mes de abril del año en que fue sembrado el cultivo de verano informado Precipitaciones' },
+  { key: 'gluten_pct', name: 'Gluten Pct', family: 'cosecha_resultados_calidad', sub: 'calidad', type: 'number', unit: '%', required: false, source: 'user_input', desc: 'Gluten de la mercadería cosechada expresada en porcentaje. Peso Hectolítrico' },
+  { key: 'materia_grasa_pct', name: 'Materia Grasa Pct', family: 'cosecha_resultados_calidad', sub: 'calidad', type: 'number', unit: '%', required: false, source: 'user_input', desc: 'Porcentaje de materia grasa de la mercadería cosechada, expresado en porcentaje Rendimiento neto' },
+  { key: 'peso_hectolitrico_kg_hl', name: 'Peso Hectolitrico Kg Hl', family: 'cosecha_resultados_calidad', sub: 'calidad', type: 'number', unit: 'kg/hl', required: false, source: 'user_input', desc: 'Peso hectolítrico de la mercadería cosechada expresada en Kg/Hl. Peso de 1000' },
+  { key: 'peso_mil_semillas_g', name: 'Peso Mil Semillas G', family: 'cosecha_resultados_calidad', sub: 'calidad', type: 'number', unit: 'g', required: false, source: 'user_input', desc: 'Peso de mil granos de la mercadería obtenida expresado en gramos.' },
+  { key: 'proteina_pct', name: 'Proteina Pct', family: 'cosecha_resultados_calidad', sub: 'calidad', type: 'number', unit: '%', required: false, source: 'user_input', desc: 'Proteína de la mercadería cosechada expresada en porcentaje.' },
+  { key: 'fecha_cosecha', name: 'Fecha Cosecha', family: 'cosecha_resultados_calidad', sub: 'cosecha', type: 'date', unit: '—', required: true, source: 'user_input', desc: 'Día, mes y año que se cosechó el cultivo o en el que se terminó el uso para el caso de uso forrajero Humedad de' },
+  { key: 'humedad_cosecha_pct', name: 'Humedad Cosecha Pct', family: 'cosecha_resultados_calidad', sub: 'cosecha', type: 'number', unit: '%', required: false, source: 'user_input', desc: 'Porcentaje de humedad al que el grano fue cosechado.' },
+  { key: 'produccion_total_tn', name: 'Produccion Total Tn', family: 'cosecha_resultados_calidad', sub: 'rendimiento', type: 'number', unit: 'tn', required: false, source: 'user_input', desc: 'Producción total obtenida de la unidad de manejo informada expresada en toneladas' },
+  { key: 'rendimiento_cosechado_kg_ha', name: 'Rendimiento Cosechado Kg Ha', family: 'cosecha_resultados_calidad', sub: 'rendimiento', type: 'number', unit: 'kg/ha', required: true, source: 'user_input', desc: 'Producción obtenida del cultivo por hectárea cosechada.' },
+  { key: 'rendimiento_neto_girasol_confitero_kg_ha', name: 'Rendimiento Neto Girasol Confitero Kg Ha', family: 'cosecha_resultados_calidad', sub: 'rendimiento', type: 'number', unit: 'kg/ha', required: false, source: 'user_input', desc: 'Rendimiento de girasol confitero una vez descontado el porcentaje de merma obtenido en la mercadería entregada.' },
+  { key: 'superficie_cosechada_ha', name: 'Superficie Cosechada Ha', family: 'cosecha_resultados_calidad', sub: 'superficie', type: 'number', unit: 'ha', required: true, source: 'user_input', desc: 'Superficie cosechada de la unidad de manejo informada.' },
+  { key: 'superficie_sembrada_ha', name: 'Superficie Sembrada Ha', family: 'cosecha_resultados_calidad', sub: 'superficie', type: 'number', unit: 'ha', required: true, source: 'user_input', desc: 'Superficie sembrada de la unidad de manejo informada. Superficie' },
+  { key: 'aporte_k_kg_ha', name: 'Aporte K Kg Ha', family: 'fertilizacion_nutricion', sub: 'aportes_nutrientes', type: 'number', unit: 'kg/ha', required: false, source: 'user_input', desc: 'Potasio total aplicado, calculado en función de la dosis y productos fertilizantes informados, expresado en kg/ha. Curasemilla/Inocula' },
+  { key: 'aporte_n_kg_ha', name: 'Aporte N Kg Ha', family: 'fertilizacion_nutricion', sub: 'aportes_nutrientes', type: 'number', unit: 'kg/ha', required: false, source: 'user_input', desc: 'Nitrógeno total aplicado, calculado en función de la dosis y productos fertilizantes informados, expresado en kg/ha.' },
+  { key: 'aporte_p_kg_ha', name: 'Aporte P Kg Ha', family: 'fertilizacion_nutricion', sub: 'aportes_nutrientes', type: 'number', unit: 'kg/ha', required: false, source: 'user_input', desc: 'Fósforo total aplicado, calculado en función de la dosis y productos fertilizantes informados, expresado en kg/ha.' },
+  { key: 'aporte_s_kg_ha', name: 'Aporte S Kg Ha', family: 'fertilizacion_nutricion', sub: 'aportes_nutrientes', type: 'number', unit: 'kg/ha', required: false, source: 'user_input', desc: 'Azufre total aplicado, calculado en función de la dosis y productos fertilizantes informados, expresado en kg/ha.' },
+  { key: 'modalidad_fertilizacion', name: 'Modalidad Fertilizacion', family: 'fertilizacion_nutricion', sub: 'estrategia_fertilizacion', type: 'enum', unit: '—', required: true, source: 'user_input', desc: 'Identifica si la unidad de manejo fue fertilizada con dosis fija, con dosis variable o si no fue fertilizada.' },
+  { key: 'fertilizante_dosis', name: 'Fertilizante Dosis', family: 'fertilizacion_nutricion', sub: 'fertilizantes', type: 'number', unit: 'kg o l/ha', required: true, source: 'user_input', desc: 'Dosis con la que se aplicó el fertilizante I, expresado en kg para fertilizantes sólidos y en lt/ha para fertilizantes líquidos.' },
+  { key: 'fertilizante_forma_aplicacion', name: 'Fertilizante Forma Aplicacion', family: 'fertilizacion_nutricion', sub: 'fertilizantes', type: 'enum', unit: '—', required: false, source: 'user_input', desc: 'Forma de aplicación del producto I' },
+  { key: 'fertilizante_momento', name: 'Fertilizante Momento', family: 'fertilizacion_nutricion', sub: 'fertilizantes', type: 'enum', unit: '—', required: false, source: 'user_input', desc: 'Momento en el que se aplicó el producto I, en relación a la siembra del cultivo informado.' },
+  { key: 'fertilizante_producto', name: 'Fertilizante Producto', family: 'fertilizacion_nutricion', sub: 'fertilizantes', type: 'string', unit: '—', required: true, source: 'user_input', desc: 'Nombre del fertilizante I aplicado. Momento' },
+  { key: 'campo_extra_crea', name: 'Campo Extra Crea', family: 'identidad_ubicacion', sub: 'geografia', type: 'enum', unit: '—', required: false, source: 'user_input', desc: 'Establecimientos informados que no se encuentran nucleados dentro de un Grupo CREA.' },
+  { key: 'crea', name: 'Crea', family: 'identidad_ubicacion', sub: 'geografia', type: 'string', unit: '—', required: true, source: 'user_input', desc: 'Órgano de funcionamiento que nuclea empresas CREAs con afinidad, asesorados por la misma persona. Organizados por Región.' },
+  { key: 'cuic', name: 'Cuic', family: 'identidad_ubicacion', sub: 'geografia', type: 'string', unit: '—', required: true, source: 'user_input', desc: 'Código Único de Identificación CREA. Es el dato referente a una razón social.' },
+  { key: 'departamento_partido', name: 'Departamento Partido', family: 'identidad_ubicacion', sub: 'geografia', type: 'enum', unit: '—', required: true, source: 'user_input', desc: 'Departamento en el que se encuentra el establecimiento informado.' },
+  { key: 'establecimiento', name: 'Establecimiento', family: 'identidad_ubicacion', sub: 'geografia', type: 'string', unit: '—', required: true, source: 'user_input', desc: 'Nombre del establecimiento o campo que nuclea las unidades de manejo o lotes' },
+  { key: 'latitud', name: 'Latitud', family: 'identidad_ubicacion', sub: 'geografia', type: 'geo', unit: 'grados_minutos_segundos', required: false, source: 'user_input', desc: 'Distancia desde el centro del lote hasta el paralelo del Ecuador.' },
+  { key: 'localidad', name: 'Localidad', family: 'identidad_ubicacion', sub: 'geografia', type: 'enum', unit: '—', required: true, source: 'user_input', desc: 'Localidad más cercana al establecimiento informado.' },
+  { key: 'longitud', name: 'Longitud', family: 'identidad_ubicacion', sub: 'geografia', type: 'geo', unit: 'grados_minutos_segundos', required: false, source: 'user_input', desc: 'Distancia desde el centro del lote hasta el meridiano de Greenwich.' },
+  { key: 'lote', name: 'Lote', family: 'identidad_ubicacion', sub: 'geografia', type: 'string', unit: '—', required: true, source: 'user_input', desc: 'Nombre de la unidad de manejo a partir de la cual se releva toda la información.Glosario Variables descarga DAT' },
+  { key: 'provincia', name: 'Provincia', family: 'identidad_ubicacion', sub: 'geografia', type: 'enum', unit: '—', required: true, source: 'user_input', desc: 'Provincia en el que se encuentra el establecimiento informado. Departamento/Parti' },
+  { key: 'region', name: 'Region', family: 'identidad_ubicacion', sub: 'geografia', type: 'enum', unit: '—', required: true, source: 'user_input', desc: 'Clasificación geográfica de referencia según criterio Región CREA' },
+  { key: 'tenencia', name: 'Tenencia', family: 'identidad_ubicacion', sub: 'geografia', type: 'enum', unit: '—', required: true, source: 'user_input', desc: 'Régimen de posesión del lote informado por parte del CUIC.' },
+  { key: 'zona', name: 'Zona', family: 'identidad_ubicacion', sub: 'geografia', type: 'string', unit: '—', required: false, source: 'user_input', desc: 'Clasificación geográfica dentro de la Región CREA según criterio de las mismas.' },
+  { key: 'caso_importacion', name: 'Caso Importacion', family: 'identidad_ubicacion', sub: 'identificadores', type: 'number', unit: '—', required: false, source: 'user_input', desc: 'Numero secuencial de caso importado semanalmente (no id)' },
+  { key: 'id_registro', name: 'Id Registro', family: 'identidad_ubicacion', sub: 'identificadores', type: 'string', unit: '—', required: false, source: 'user_input', desc: 'Identificador de fila informada' },
+  { key: 'lote_id', name: 'Lote Id', family: 'identidad_ubicacion', sub: 'identificadores', type: 'string', unit: '—', required: false, source: 'user_input', desc: 'Combinación única de grupo CREA, CUIC, establecimiento y lote. Diferencia a la' },
+  { key: 'ambiente_lote', name: 'Ambiente Lote', family: 'identidad_ubicacion', sub: 'unidad_manejo', type: 'string', unit: '—', required: true, source: 'user_input', desc: 'Clasificación del ambiente de la unidad de manejo en función al criterio de quien define la estrategia de manejo. Clasificación de' },
+  { key: 'ambiente_regional', name: 'Ambiente Regional', family: 'identidad_ubicacion', sub: 'unidad_manejo', type: 'string', unit: '—', required: false, source: 'user_input', desc: 'Ambiente del lote según clasificación de la Región CREA' },
+  { key: 'nivel_unidad_manejo', name: 'Nivel Unidad Manejo', family: 'identidad_ubicacion', sub: 'unidad_manejo', type: 'enum', unit: '—', required: false, source: 'user_input', desc: 'Indica cuál es la unidad de manejo a la que hace referencia la fila. Campo, lote, macroambiente o microambiente' },
+  { key: 'ciclo_material', name: 'Ciclo Material', family: 'implantacion', sub: 'material_genetico', type: 'enum', unit: '—', required: false, source: 'user_input', desc: 'Clasificación por cultivo según el tiempo transcurrido desde su emergencia a madurez fisiológica' },
+  { key: 'evento_biotecnologico', name: 'Evento Biotecnologico', family: 'implantacion', sub: 'material_genetico', type: 'string', unit: '—', required: true, source: 'user_input', desc: 'Tecnología asociada al material genético sembrado para los cultivos de maíz y girasol.' },
+  { key: 'genetica', name: 'Genetica', family: 'implantacion', sub: 'material_genetico', type: 'enum', unit: '—', required: true, source: 'user_input', desc: 'Nombre del híbrido o variedad sembrada. Versión' },
+  { key: 'semillero', name: 'Semillero', family: 'implantacion', sub: 'material_genetico', type: 'enum', unit: '—', required: true, source: 'user_input', desc: 'Empresa comercial proveedora de la genética del cultivo.' },
+  { key: 'causa_resiembra', name: 'Causa Resiembra', family: 'implantacion', sub: 'siembra', type: 'string', unit: '—', required: false, source: 'user_input', desc: 'Motivo por el cuál se realizó la resiembra.' },
+  { key: 'decanato_fecha_siembra', name: 'Decanato Fecha Siembra', family: 'implantacion', sub: 'siembra', type: 'string', unit: '—', required: false, source: 'user_input', desc: 'Clasificación del momento de la siembra dentro de cada mes en 3 divisiones: los sembrados entre el dia 1 y el 10, entre el 11 y el 20 y entre el 21 y 30 o 31.' },
+  { key: 'densidad_siembra_sem_ha', name: 'Densidad Siembra Sem Ha', family: 'implantacion', sub: 'siembra', type: 'number', unit: 'sem/ha', required: true, source: 'user_input', desc: 'Cantidad de semillas totales sembradas por hectárea.' },
+  { key: 'densidad_siembra_sem_m2', name: 'Densidad Siembra Sem M2', family: 'implantacion', sub: 'siembra', type: 'number', unit: 'sem/m2', required: true, source: 'user_input', desc: 'Cantidad de semillas totales sembradas por metro cuadrado de superficie.' },
+  { key: 'distancia_entre_hileras_cm', name: 'Distancia Entre Hileras Cm', family: 'implantacion', sub: 'siembra', type: 'number', unit: 'cm', required: true, source: 'user_input', desc: 'Espacio entre una línea de siembra y su paralela.' },
+  { key: 'fecha_siembra', name: 'Fecha Siembra', family: 'implantacion', sub: 'siembra', type: 'date', unit: '—', required: true, source: 'user_input', desc: 'Día, mes y año que se sembró el cultivo o en el que se inicio el uso para el' },
+  { key: 'poblacion_lograda_pl_m2', name: 'Poblacion Lograda Pl M2', family: 'implantacion', sub: 'siembra', type: 'number', unit: 'pl/m2', required: false, source: 'user_input', desc: 'Cantidad de plantas presentes por hectárea. Distanciamiento' },
+  { key: 'resiembra', name: 'Resiembra', family: 'implantacion', sub: 'siembra', type: 'enum', unit: '—', required: false, source: 'user_input', desc: 'Identifica si la información reportada corresponde a una resiembra por alguna adversidad previa' },
+  { key: 'sistema_labranza', name: 'Sistema Labranza', family: 'implantacion', sub: 'siembra', type: 'enum', unit: '—', required: false, source: 'user_input', desc: 'Tipo de labor mecánico con la que se implantó el cultivo.' },
+  { key: 'sistema_siembra', name: 'Sistema Siembra', family: 'implantacion', sub: 'siembra', type: 'enum', unit: '—', required: false, source: 'user_input', desc: 'Mecanismo y tecnología con la que se sembró el cultivo informado Sistema de' },
+  { key: 'tratamiento_semilla_descripcion', name: 'Tratamiento Semilla Descripcion', family: 'implantacion', sub: 'tratamiento_semilla', type: 'string', unit: '—', required: false, source: 'user_input', desc: 'Descripción del tratamiento que tuvo la semilla a la siembra. Aplicación de' },
+  { key: 'aporte_fosforo_kg_p_ha', name: 'Aporte Fosforo Kg P Ha', family: 'indicadores_calculados', sub: 'balance_nutrientes', type: 'number', unit: 'kg P/ha', required: false, source: 'user_input', desc: 'Aporte de fósforo realizado mediante la fertilización de cada cultivo reporte Extracción de' },
+  { key: 'balance_fosforo_kg_p_ha', name: 'Balance Fosforo Kg P Ha', family: 'indicadores_calculados', sub: 'balance_nutrientes', type: 'number', unit: 'kg P/ha', required: false, source: 'user_input', desc: 'Diferencia entre aporte y absorción de fósforo por parte del cultivo según las tablas del IPNI (sólo destino Grano)' },
+  { key: 'extraccion_fosforo_kg_p_ha', name: 'Extraccion Fosforo Kg P Ha', family: 'indicadores_calculados', sub: 'balance_nutrientes', type: 'number', unit: 'kg P/ha', required: false, source: 'user_input', desc: 'Extracción de fósforo por parte del cultivo según las tablas del IPNI (sólo destino grano)' },
+  { key: 'eiq_riesgo_consumidor', name: 'Eiq Riesgo Consumidor', family: 'indicadores_calculados', sub: 'fitosanitarios', type: 'number', unit: '—', required: false, source: 'user_input', desc: 'Peligrosidad que representa planteo de fitosanitarios hacia la exposición del consumidor final RIPEST Índice' },
+  { key: 'eiq_riesgo_ecotoxicologico', name: 'Eiq Riesgo Ecotoxicologico', family: 'indicadores_calculados', sub: 'fitosanitarios', type: 'number', unit: '—', required: false, source: 'user_input', desc: 'Toxicidad que representa planteo de fitosanitarios hacia sistemas acuáticos y terrestres EIQ Riesgo' },
+  { key: 'eiq_riesgo_trabajador', name: 'Eiq Riesgo Trabajador', family: 'indicadores_calculados', sub: 'fitosanitarios', type: 'number', unit: '—', required: false, source: 'user_input', desc: 'Peligrosidad que representa planteo de fitosanitarios hacia el empleado rural EIQ Riesgo' },
+  { key: 'indice_eiq', name: 'Indice Eiq', family: 'indicadores_calculados', sub: 'fitosanitarios', type: 'number', unit: '—', required: false, source: 'user_input', desc: 'Indicador que permite evaluar el impacto ambiental generado por una aplicación de fitosanitarios. Tiene en cuenta la peligrosidad que representa cada producto fitosanitario hacia el empleado rural, la' },
+  { key: 'principio_activo_kg_ha_por_banda', name: 'Principio Activo Kg Ha Por Banda', family: 'indicadores_calculados', sub: 'fitosanitarios', type: 'number', unit: 'kg i.a./ha', required: false, source: 'user_input', desc: 'Kg de principio activo según banda toxicológica [la, lb, II, I, IV] aplicados por hectárea' },
+  { key: 'ripest_indice_pesticidas', name: 'Ripest Indice Pesticidas', family: 'indicadores_calculados', sub: 'fitosanitarios', type: 'number', unit: '—', required: false, source: 'user_input', desc: 'RIPEST (Riesgo de Pesticidas) es un modelo de evaluación del riesgo ambiental asociado al uso de pesticidas en sistemas de producción agrícolas. El enfoque de diagnóstico está basado en un rasgo que v' },
+  { key: 'ripest_riesgo_insectos', name: 'Ripest Riesgo Insectos', family: 'indicadores_calculados', sub: 'fitosanitarios', type: 'number', unit: '—', required: false, source: 'user_input', desc: 'Riesgo ecotoxicológico sobre insectos de pesticidas aplicados en un lote RIPEST Índice' },
+  { key: 'ripest_riesgo_mamiferos', name: 'Ripest Riesgo Mamiferos', family: 'indicadores_calculados', sub: 'fitosanitarios', type: 'number', unit: '—', required: false, source: 'user_input', desc: 'Riesgo ecotoxicológico sobre mamíferos de pesticidas aplicados en un lote RIPEST Índice' },
+  { key: 'ripest_riesgo_peces', name: 'Ripest Riesgo Peces', family: 'indicadores_calculados', sub: 'fitosanitarios', type: 'number', unit: '—', required: false, source: 'user_input', desc: 'Riesgo ecotoxicológico combinado de pesticidas aplicados en un Lote. Banda [la, lb, II, I,' },
+  { key: 'emisiones_agroquimicos_kg_co2eq_ha', name: 'Emisiones Agroquimicos Kg Co2Eq Ha', family: 'indicadores_calculados', sub: 'huella_carbono', type: 'number', unit: 'kg CO2eq/ha', required: false, source: 'user_input', desc: 'Incluye las emisiones generadas por la producción de agroquímicos empleados en el ciclo productivo. Emisiones de Semillas (Kg' },
+  { key: 'emisiones_combustibles_kg_co2eq_ha', name: 'Emisiones Combustibles Kg Co2Eq Ha', family: 'indicadores_calculados', sub: 'huella_carbono', type: 'number', unit: 'kg CO2eq/ha', required: false, source: 'user_input', desc: 'Cálculo de las emisiones generadas por el uso de combustibles, conformado por las emisiones debidas al consumo de nafta y de gasoil durante el ciclo productivo. También este componente incluye las emi' },
+  { key: 'emisiones_fertilizantes_kg_co2eq_ha', name: 'Emisiones Fertilizantes Kg Co2Eq Ha', family: 'indicadores_calculados', sub: 'huella_carbono', type: 'number', unit: 'kg CO2eq/ha', required: false, source: 'user_input', desc: 'Incluye emisiones de N2O, tanto en forma directa como indirecta, generada por el nitrógeno aplicado en forma de fertilizantes sintéticos. Emisiones de Agroquímicos (Kg' },
+  { key: 'emisiones_residuos_cosecha_kg_co2eq_ha', name: 'Emisiones Residuos Cosecha Kg Co2Eq Ha', family: 'indicadores_calculados', sub: 'huella_carbono', type: 'number', unit: 'kg CO2eq/ha', required: false, source: 'user_input', desc: 'Incluye las emisiones de N2O debidas al debidas al nitrógeno presente en residuos de cultivos (sobre la superficie y debajo de ésta). Emisiones de Fertilizantes (Kg' },
+  { key: 'emisiones_semillas_kg_co2eq_ha', name: 'Emisiones Semillas Kg Co2Eq Ha', family: 'indicadores_calculados', sub: 'huella_carbono', type: 'number', unit: 'kg CO2eq/ha', required: false, source: 'user_input', desc: 'Corresponde a la emisión por la producción de semillas utilizadas en la siembra. Emisiones Combustibles (Kg' },
+  { key: 'diferencia_vs_media_kg_ha', name: 'Diferencia Vs Media Kg Ha', family: 'indicadores_calculados', sub: 'rendimiento', type: 'number', unit: 'kg/ha', required: false, source: 'user_input', desc: 'Diferencia de rendimiento respecto de la media reportada para el mismo cultivo, destino, estacionalidad (primera, segunda o tercera), riego, campaña, región, zona y grupo CREA.' },
+  { key: 'rendimiento_relativo_pct', name: 'Rendimiento Relativo Pct', family: 'indicadores_calculados', sub: 'rendimiento', type: 'number', unit: '%', required: false, source: 'user_input', desc: 'Porcentaje del rendimiento informado en relación con la media reportada para el mismo cultivo, destino, estacionalidad (primera, segunda o tercera), riego, campaña, región, zona y grupo CREA.' },
+  { key: 'indice_intensificacion', name: 'Indice Intensificacion', family: 'indicadores_calculados', sub: 'rotacion', type: 'number', unit: '—', required: false, source: 'user_input', desc: 'Índice de intensificación para cada lote calculado como el cociente entre el número de cultivos según estacionalidad y la cantidad de últimas campañas consecutivas. Este indicador aplica para la últim' },
+  { key: 'proporcion_gramineas_pct', name: 'Proporcion Gramineas Pct', family: 'indicadores_calculados', sub: 'rotacion', type: 'number', unit: '%', required: false, source: 'user_input', desc: 'Proporción de cultivos de gramíneas en relación a la cantidad de cultivos totales realizados para cada lote. Este indicador aplica para la última campaña informada. Secuencia de' },
+  { key: 'factor_100_rendimiento_grano', name: 'Factor 100 Rendimiento Grano', family: 'manejo_especifico_cultivo', sub: 'arroz', type: 'number', unit: 'factor_100', required: false, source: 'user_input', desc: 'Arroz: factor 100 de rendimiento de grano obtenido en este lote informado.' },
+  { key: 'fecha_diferenciacion_panicular', name: 'Fecha Diferenciacion Panicular', family: 'manejo_especifico_cultivo', sub: 'arroz', type: 'date', unit: '—', required: false, source: 'user_input', desc: 'Arroz: fecha de diferenciación panicular del lote informado en esta fila en formato dd/mm/aaaa. Arroz- Fecha' },
+  { key: 'fecha_emergencia', name: 'Fecha Emergencia', family: 'manejo_especifico_cultivo', sub: 'arroz', type: 'date', unit: '—', required: false, source: 'user_input', desc: 'Arroz: fecha de emergencia del lote informado en esta fila en formato dd/mm/aaaa. Arroz- Fecha de' },
+  { key: 'fecha_fin_riego', name: 'Fecha Fin Riego', family: 'manejo_especifico_cultivo', sub: 'arroz', type: 'date', unit: '—', required: false, source: 'user_input', desc: 'Arroz: fecha de fin de riego del lote informado en esta fila en formato dd/mm/aaaa. Arroz- Fecha de Diferenciación' },
+  { key: 'fecha_floracion', name: 'Fecha Floracion', family: 'manejo_especifico_cultivo', sub: 'arroz', type: 'date', unit: '—', required: false, source: 'user_input', desc: 'Arroz: fecha de floración del lote informado en esta fila en formato dd/mm/aaaa. Arroz- Panojas' },
+  { key: 'fecha_inicio_riego', name: 'Fecha Inicio Riego', family: 'manejo_especifico_cultivo', sub: 'arroz', type: 'date', unit: '—', required: false, source: 'user_input', desc: 'Arroz: fecha de inicio de riego del lote informado en esta fila en formato dd/mm/aaaa. Arroz- Fecha de Fin' },
+  { key: 'panojas_logradas_m2', name: 'Panojas Logradas M2', family: 'manejo_especifico_cultivo', sub: 'arroz', type: 'number', unit: 'panojas/m2', required: false, source: 'user_input', desc: 'Arroz: cantidad de panojas logradas por metro cuadrado Arroz- Rendimiento' },
+  { key: 'aplicacion_madurativo', name: 'Aplicacion Madurativo', family: 'manejo_especifico_cultivo', sub: 'cana_azucar', type: 'enum', unit: '—', required: false, source: 'user_input', desc: 'Caña de azucar: indica si realizó o no una aplicación de madurativo. Fecha cosecha' },
+  { key: 'estrategia_control_malezas', name: 'Estrategia Control Malezas', family: 'manejo_especifico_cultivo', sub: 'cana_azucar', type: 'enum', unit: '—', required: false, source: 'user_input', desc: 'Caña de azucar: estrategia de control empleada en el cultivo de Caña de Azúcar para el control de malezas.' },
+  { key: 'labor_cincel', name: 'Labor Cincel', family: 'manejo_especifico_cultivo', sub: 'cana_azucar', type: 'enum', unit: '—', required: false, source: 'user_input', desc: 'Caña de azucar: indica si realizó o no cincel como labor mecánica. Aplicador de' },
+  { key: 'labor_cultivador_discos', name: 'Labor Cultivador Discos', family: 'manejo_especifico_cultivo', sub: 'cana_azucar', type: 'enum', unit: '—', required: false, source: 'user_input', desc: 'Caña de azucar: indica si realizó o no cultivador de discos como labor mecánica.' },
+  { key: 'labor_descompactador', name: 'Labor Descompactador', family: 'manejo_especifico_cultivo', sub: 'cana_azucar', type: 'enum', unit: '—', required: false, source: 'user_input', desc: 'Caña de azucar: indica si realizó o no descompactador como labor mecánica. Cultivador de' },
+  { key: 'rendimiento_azucar_tn_ha', name: 'Rendimiento Azucar Tn Ha', family: 'manejo_especifico_cultivo', sub: 'cana_azucar', type: 'number', unit: 'tn/ha', required: false, source: 'user_input', desc: 'Caña de azucar: Rendimiento de azucar expresado en toneladas de azucar por hectárea cosechada Estrategia química para el control de' },
+  { key: 'calibre_pct', name: 'Calibre Pct', family: 'manejo_especifico_cultivo', sub: 'garbanzo', type: 'number', unit: '%', required: false, source: 'user_input', desc: 'Gabanzo: porcentaje de mercaderia con calibre de 7 mm.' },
+  { key: 'herbicida_secado', name: 'Herbicida Secado', family: 'manejo_especifico_cultivo', sub: 'garbanzo', type: 'enum', unit: '—', required: false, source: 'user_input', desc: 'Gabanzo: Seleccione de la lista el herbicida utilizado en el primer secado del garbanzo. Herbicidas de' },
+  { key: 'lamina_riego_floracion_mm', name: 'Lamina Riego Floracion Mm', family: 'manejo_especifico_cultivo', sub: 'garbanzo', type: 'number', unit: 'mm', required: false, source: 'user_input', desc: 'Gabanzo: lamina aplicada expresada en milimetros para el cultivo informado en floración del cultivo de garbanzo. Lámina de Riego en' },
+  { key: 'lamina_riego_llenado_mm', name: 'Lamina Riego Llenado Mm', family: 'manejo_especifico_cultivo', sub: 'garbanzo', type: 'number', unit: 'mm', required: false, source: 'user_input', desc: 'Gabanzo: lamina aplicada expresada en milimetros para el cultivo informado en llenado de granos del cultivo de garbanzo.' },
+  { key: 'lamina_riego_presiembra_mm', name: 'Lamina Riego Presiembra Mm', family: 'manejo_especifico_cultivo', sub: 'garbanzo', type: 'number', unit: 'mm', required: false, source: 'user_input', desc: 'Gabanzo: lamina aplicada expresada en milimetros para el cultivo informado en presiembra del cultivo de garbanzo. Lámina de Riego en' },
+  { key: 'lamina_riego_vegetativo_mm', name: 'Lamina Riego Vegetativo Mm', family: 'manejo_especifico_cultivo', sub: 'garbanzo', type: 'number', unit: 'mm', required: false, source: 'user_input', desc: 'Gabanzo: lamina aplicada expresada en milimetros para el cultivo informado en vegetativo del cultivo de garbanzo. Lámina de Riego en' },
+  { key: 'nivel_amarillamiento', name: 'Nivel Amarillamiento', family: 'manejo_especifico_cultivo', sub: 'garbanzo', type: 'string', unit: '—', required: false, source: 'user_input', desc: 'Gabanzo: nivel de amarillamiento visual de plantas que presentaba el lote de garbanzo en general. Herbicidas de' },
+  { key: 'fecha_arrancado', name: 'Fecha Arrancado', family: 'manejo_especifico_cultivo', sub: 'mani', type: 'date', unit: '—', required: true, source: 'user_input', desc: 'Maní: fecha en la que el cultivo se arrancó, expresado en dd/mm/aaaa. % Madurez en' },
+  { key: 'madurez_arrancado_pct', name: 'Madurez Arrancado Pct', family: 'manejo_especifico_cultivo', sub: 'mani', type: 'number', unit: '%', required: false, source: 'user_input', desc: 'Maní: porcentaje de madurez al momento del arrancado, expresado en porcentaje.' },
+  { key: 'observaciones', name: 'Observaciones', family: 'observaciones', sub: 'notas', type: 'string', unit: '—', required: false, source: 'user_input', desc: 'Observaciones detalladas por el usuario' },
+  { key: 'fungicida_aplicado', name: 'Fungicida Aplicado', family: 'proteccion_cultivo', sub: 'fungicidas', type: 'enum', unit: '—', required: false, source: 'user_input', desc: 'Identifica si la unidad de manejo tuvo aplicación de fungicidas.' },
+  { key: 'fungicida_dosis', name: 'Fungicida Dosis', family: 'proteccion_cultivo', sub: 'fungicidas', type: 'number', unit: 'kg o l/ha', required: false, source: 'user_input', desc: 'Dosis con la que se aplicó el principio activo 1 en la primera aplicación de fungicidas, expresado en kg o lt/ha.' },
+  { key: 'fungicida_familia', name: 'Fungicida Familia', family: 'proteccion_cultivo', sub: 'fungicidas', type: 'string', unit: '—', required: false, source: 'user_input', desc: 'Familia química del fungicida utilizado en la primera aplicación de fungicidas. Momento Fungicida' },
+  { key: 'fungicida_fecha_aplicacion', name: 'Fungicida Fecha Aplicacion', family: 'proteccion_cultivo', sub: 'fungicidas', type: 'date', unit: '—', required: true, source: 'user_input', desc: 'Dia, mes y año que se realizó la primera aplicación de fungicidas.' },
+  { key: 'fungicida_momento', name: 'Fungicida Momento', family: 'proteccion_cultivo', sub: 'fungicidas', type: 'enum', unit: '—', required: false, source: 'user_input', desc: 'Momento en que se aplicó el primer fungicida, en relación a la fecha de siembra del cultivo informado' },
+  { key: 'fungicida_objetivo_enfermedad', name: 'Fungicida Objetivo Enfermedad', family: 'proteccion_cultivo', sub: 'fungicidas', type: 'enum', unit: '—', required: false, source: 'user_input', desc: 'Enfermedad target a la que fue dirigida la primera aplicación de fungicida' },
+  { key: 'fungicida_producto', name: 'Fungicida Producto', family: 'proteccion_cultivo', sub: 'fungicidas', type: 'enum', unit: '—', required: false, source: 'user_input', desc: 'Nombre del principio activo 1 utilizado en la primera aplicación de fungicidas.' },
+  { key: 'herbicida_dosis', name: 'Herbicida Dosis', family: 'proteccion_cultivo', sub: 'herbicidas', type: 'number', unit: 'kg o l/ha', required: false, source: 'user_input', desc: 'Dosis con la que se aplicó el principio activo 1 en la primera aplicación de herbicidas, expresado en kg o lt/ha.' },
+  { key: 'herbicida_fecha_aplicacion', name: 'Herbicida Fecha Aplicacion', family: 'proteccion_cultivo', sub: 'herbicidas', type: 'date', unit: '—', required: true, source: 'user_input', desc: 'Dia, mes y año que se realizó la primera aplicación de herbicidas.' },
+  { key: 'herbicida_producto', name: 'Herbicida Producto', family: 'proteccion_cultivo', sub: 'herbicidas', type: 'enum', unit: '—', required: false, source: 'user_input', desc: 'Nombre del principio activo 1 utilizado en la primera aplicación de herbicidas.' },
+  { key: 'herbicida_residual_familia', name: 'Herbicida Residual Familia', family: 'proteccion_cultivo', sub: 'herbicidas', type: 'string', unit: '—', required: false, source: 'user_input', desc: 'Familia química del herbicida residual aplicado en el barbecho invernal. Herbicida residual barbecho' },
+  { key: 'numero_aplicaciones_selectivas', name: 'Numero Aplicaciones Selectivas', family: 'proteccion_cultivo', sub: 'herbicidas', type: 'number', unit: '—', required: false, source: 'user_input', desc: 'Número de aplicaciones selectivas que se realizaron en el lote informado. Herbicida residual' },
+  { key: 'insecticida_dosis', name: 'Insecticida Dosis', family: 'proteccion_cultivo', sub: 'insecticidas', type: 'number', unit: 'kg o l/ha', required: false, source: 'user_input', desc: 'Dosis con la que se aplicó el principio activo 1 en la primera aplicación de insecticidas, expresado en kg o lt/ha.' },
+  { key: 'insecticida_fecha_aplicacion', name: 'Insecticida Fecha Aplicacion', family: 'proteccion_cultivo', sub: 'insecticidas', type: 'date', unit: '—', required: true, source: 'user_input', desc: 'Dia, mes y año que se realizó la primera aplicación de insecticidas.' },
+  { key: 'insecticida_producto', name: 'Insecticida Producto', family: 'proteccion_cultivo', sub: 'insecticidas', type: 'enum', unit: '—', required: false, source: 'user_input', desc: 'Nombre del principio activo 1 utilizado en la primera aplicación de insecticidas.' },
+  { key: 'campania', name: 'Campania', family: 'sistema_cultivo_rotacion', sub: 'campania', type: 'string', unit: '—', required: false, source: 'user_input', desc: 'Secuencia de años entre los que se siembra y cosecha el cultivo.' },
+  { key: 'cultivo', name: 'Cultivo', family: 'sistema_cultivo_rotacion', sub: 'clasificacion_cultivo', type: 'enum', unit: '—', required: true, source: 'user_input', desc: 'Cultivo sembrado en la unidad de manejo informada.' },
+  { key: 'destino_cultivo', name: 'Destino Cultivo', family: 'sistema_cultivo_rotacion', sub: 'clasificacion_cultivo', type: 'enum', unit: '—', required: true, source: 'user_input', desc: 'Uso o función que se dio al cultivo de la unidad relevada. Rendimiento (superficie' },
+  { key: 'estacionalidad_cultivo', name: 'Estacionalidad Cultivo', family: 'sistema_cultivo_rotacion', sub: 'clasificacion_cultivo', type: 'enum', unit: '—', required: false, source: 'user_input', desc: 'Estacionalidad del cultivo según el ciclo biológico del cultivo informado (Verano / Invierno / Perenne)' },
+  { key: 'primera_segunda', name: 'Primera Segunda', family: 'sistema_cultivo_rotacion', sub: 'clasificacion_cultivo', type: 'enum', unit: '—', required: false, source: 'user_input', desc: 'Clasificación para el cultivo de verano en función del antecesor. Se denomina cultivo de primera a aquel cultivo de verano que no tuvo como antecesor otro cultivo de cosecha/ensilado en la misma campa' },
+  { key: 'subgrupo_cultivo', name: 'Subgrupo Cultivo', family: 'sistema_cultivo_rotacion', sub: 'clasificacion_cultivo', type: 'enum', unit: '—', required: true, source: 'user_input', desc: 'Caracterización del cultivo informado.' },
+  { key: 'temprano_tardio', name: 'Temprano Tardio', family: 'sistema_cultivo_rotacion', sub: 'clasificacion_cultivo', type: 'enum', unit: '—', required: false, source: 'user_input', desc: 'Clasificación para el cultivo de maíz de primera en función de la fecha de siembra. Sembrados previo al 15 de noviembre se consideran temprano, posterior a eso es tardío Superficie' },
+  { key: 'cultivo_servicio', name: 'Cultivo Servicio', family: 'sistema_cultivo_rotacion', sub: 'cultivo_servicio', type: 'enum', unit: '—', required: false, source: 'user_input', desc: 'Especie sembrada como cultivo antecesor del cultivo de verano informado en ese lote. Servicio' },
+  { key: 'fecha_secado_cs', name: 'Fecha Secado Cs', family: 'sistema_cultivo_rotacion', sub: 'cultivo_servicio', type: 'date', unit: '—', required: false, source: 'user_input', desc: 'Fecha de secado del Cultivo de servicio sembrado como antecesor al cultivo de verano informado en ese lote.' },
+  { key: 'fecha_siembra_cs', name: 'Fecha Siembra Cs', family: 'sistema_cultivo_rotacion', sub: 'cultivo_servicio', type: 'date', unit: '—', required: false, source: 'user_input', desc: 'Fecha de siembra del Cultivo de servicio sembrado como antecesor al cultivo de verano informado en ese lote. CS-Fecha de' },
+  { key: 'metodo_secado_cs', name: 'Metodo Secado Cs', family: 'sistema_cultivo_rotacion', sub: 'cultivo_servicio', type: 'enum', unit: '—', required: false, source: 'user_input', desc: 'Método de secado del Cultivo de servicio sembrado como antecesor al cultivo de verano informado en ese lote.' },
+  { key: 'objetivo_ecosistemico_cs', name: 'Objetivo Ecosistemico Cs', family: 'sistema_cultivo_rotacion', sub: 'cultivo_servicio', type: 'string', unit: '—', required: false, source: 'user_input', desc: 'Principal servicio ecosistémico por el cual se realizó el Cultivo de Servicio como antecesor al cultivo de verano informado en ese lote. CS-Fecha de' },
+  { key: 'produccion_cs_ms_kg_ha', name: 'Produccion Cs Ms Kg Ha', family: 'sistema_cultivo_rotacion', sub: 'cultivo_servicio', type: 'number', unit: 'kg/ha', required: false, source: 'user_input', desc: 'Producción del Cultivo de servicio sembrado como antecesor al cultivo de verano informado en ese lote, expresada en kg de materia seca por hectárea. N° Aplicaciones' },
+  { key: 'campanias_consecutivas_n', name: 'Campanias Consecutivas N', family: 'sistema_cultivo_rotacion', sub: 'rotacion', type: 'number', unit: '—', required: false, source: 'user_input', desc: 'Número de campañas distintas consecutivas informadas para un lote (contando desde la última informada). Índice de' },
+  { key: 'campanias_distintas_n', name: 'Campanias Distintas N', family: 'sistema_cultivo_rotacion', sub: 'rotacion', type: 'number', unit: '—', required: false, source: 'user_input', desc: 'Número de campañas distintas informadas para un lote. Últimas campañas' },
+  { key: 'cultivo_antecesor', name: 'Cultivo Antecesor', family: 'sistema_cultivo_rotacion', sub: 'rotacion', type: 'enum', unit: '—', required: true, source: 'user_input', desc: 'Cultivo que precedió el cultivo informado.' },
+  { key: 'fecha_cosecha_antecesor', name: 'Fecha Cosecha Antecesor', family: 'sistema_cultivo_rotacion', sub: 'rotacion', type: 'date', unit: '—', required: false, source: 'user_input', desc: 'Caña de azucar: Fecha de cosecha del cutlivo antecesor al cultivo informado Lámina de Riego en' },
+  { key: 'secuencia_cultivos', name: 'Secuencia Cultivos', family: 'sistema_cultivo_rotacion', sub: 'rotacion', type: 'string', unit: '—', required: false, source: 'user_input', desc: 'Secuencia de cultivos ordenados por campaña (solamente para las últimas campañas consecutivas), separados por un guion \"-\" para diferentes campañas y por una barra \"/\" para cultivos dentro de la misma' },
+];
+
+const FAMILY_LABELS = {
+  'all': 'Todas',
+  'adversidades': 'Adversidades',
+  'agua_riego': 'Agua y Riego',
+  'ambiente_suelo': 'Ambiente y Suelo',
+  'clima_precipitaciones': 'Clima y Precipitaciones',
+  'cosecha_resultados_calidad': 'Cosecha y Calidad',
+  'fertilizacion_nutricion': 'Fertilización y Nutrición',
+  'identidad_ubicacion': 'Identidad y Ubicación',
+  'implantacion': 'Implantación',
+  'indicadores_calculados': 'Indicadores Calculados',
+  'manejo_especifico_cultivo': 'Manejo Específico',
+  'proteccion_cultivo': 'Protección del Cultivo',
+  'sistema_cultivo_rotacion': 'Sistema y Rotación',
+  'observaciones': 'Observaciones'
+};
+
+const PAGE_SIZE = 20;
+let currentPage = 1;
+let filteredVars = [...ALL_VARIABLES];
+let currentFamily = 'all';
+let currentSearch = '';
+
+function getFamilyLabel(f) { return FAMILY_LABELS[f] || f; }
+
+function getTypeTag(source) {
+  if (source === 'calculated') return '<span class="tag tag-type-calculated">Calculada</span>';
+  return '<span class="tag tag-type-user_input">Ingreso</span>';
+}
+
+function getRequiredTag(req) {
+  if (req) return '<span class="tag tag-required">Obligatoria</span>';
+  return '<span class="tag tag-optional">Optativa</span>';
+}
+
+function renderTable() {
+  const tbody = document.getElementById('tableBody');
+  const slice = filteredVars.slice(0, currentPage * PAGE_SIZE);
+  
+  tbody.innerHTML = slice.map(v => `
+    <tr>
+      <td class="td-key">${v.key}</td>
+      <td class="td-name">${v.name}</td>
+      <td><span class="tag tag-family">${getFamilyLabel(v.family)}</span></td>
+      <td>${getTypeTag(v.source)}</td>
+      <td style="font-family:'DM Mono',monospace;font-size:11px;color:var(--text-light);white-space:nowrap">${v.unit}</td>
+      <td>${getRequiredTag(v.required)}</td>
+      <td class="td-desc">${v.desc}</td>
+    </tr>
+  `).join('');
+
+  document.getElementById('tableCount').innerHTML = `Mostrando <strong>${slice.length}</strong> de <strong>${filteredVars.length}</strong> variables`;
+
+  const loadWrap = document.getElementById('loadMoreWrap');
+  if (filteredVars.length > slice.length) {
+    loadWrap.style.display = 'block';
+  } else {
+    loadWrap.style.display = 'none';
+  }
+}
+
+function applyFilters() {
+  currentPage = 1;
+  filteredVars = ALL_VARIABLES.filter(v => {
+    const matchFamily = currentFamily === 'all' || v.family === currentFamily;
+    const q = currentSearch.toLowerCase();
+    const matchSearch = !q || 
+      v.key.toLowerCase().includes(q) || 
+      v.name.toLowerCase().includes(q) || 
+      v.desc.toLowerCase().includes(q);
+    return matchFamily && matchSearch;
+  });
+  renderTable();
+}
+
+// Filter buttons
+document.getElementById('filterBar').addEventListener('click', e => {
+  const btn = e.target.closest('.filter-btn');
+  if (!btn) return;
+  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  currentFamily = btn.dataset.family;
+  applyFilters();
+});
+
+// Search
+document.getElementById('searchInput').addEventListener('input', e => {
+  currentSearch = e.target.value;
+  applyFilters();
+});
+
+// Load more
+document.getElementById('loadMoreBtn').addEventListener('click', () => {
+  currentPage++;
+  renderTable();
+});
+
+// Initial render
+renderTable();
+
+// ── DOWNLOADS ──
+function downloadCSV() {
+  const headers = ['variable_key','variable_name','family','subcategory','data_type','unit','required','source','description'];
+  const rows = ALL_VARIABLES.map(v => [
+    v.key, v.name, v.family, v.sub, v.type, v.unit, v.required, v.source, `"${v.desc}"`
+  ].join(','));
+  const csv = [headers.join(','), ...rows].join('\n');
+  const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url; a.download = 'ENVAA_Diccionario_v1.csv'; a.click();
+  URL.revokeObjectURL(url);
+}
+
+function downloadJSON() {
+  const data = {
+    standard: 'ENVAA - Estándar Nacional de Variables Agronómicas Argentinas',
+    version: '1.0',
+    organizations: ['AAPRESID', 'SRA', 'CREA'],
+    variables: ALL_VARIABLES
+  };
+  const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url; a.download = 'ENVAA_Diccionario_v1.json'; a.click();
+  URL.revokeObjectURL(url);
+}
+
+// ── SCROLL REVEAL ──
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach((entry, i) => {
+    if (entry.isIntersecting) {
+      setTimeout(() => entry.target.classList.add('visible'), i * 80);
+      observer.unobserve(entry.target);
+    }
+  });
+}, { threshold: 0.08 });
+
+document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+</script>
+</body>
+</html>
