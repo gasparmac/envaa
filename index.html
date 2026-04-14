@@ -1179,10 +1179,10 @@
     .filter-btn { font-size: 9.5px; padding: 7px 11px; }
     /* On mobile, hide less important table columns */
     .var-table .td-desc,
-    .var-table thead th:nth-child(7),
-    .var-table tbody td:nth-child(7) { display: none; }
     .var-table thead th:nth-child(5),
     .var-table tbody td:nth-child(5) { display: none; }
+    .var-table thead th:nth-child(4),
+    .var-table tbody td:nth-child(4) { display: none; }
 
     /* How it works */
     .how-steps { grid-template-columns: 1fr; }
@@ -1476,9 +1476,7 @@
           <th>Variable Key</th>
           <th>Nombre</th>
           <th>Familia</th>
-          <th>Tipo</th>
           <th>Unidad</th>
-          <th>Estado</th>
           <th>Descripción</th>
         </tr>
       </thead>
@@ -1864,15 +1862,6 @@ let currentSearch = '';
 
 function getFamilyLabel(f) { return FAMILY_LABELS[f] || f; }
 
-function getTypeTag(source) {
-  if (source === 'calculated') return '<span class="tag tag-type-calculated">Calculada</span>';
-  return '<span class="tag tag-type-user_input">Ingreso</span>';
-}
-
-function getRequiredTag(req) {
-  if (req) return '<span class="tag tag-required">Obligatoria</span>';
-  return '<span class="tag tag-optional">Optativa</span>';
-}
 
 function renderTable() {
   const tbody = document.getElementById('tableBody');
@@ -1883,9 +1872,7 @@ function renderTable() {
       <td class="td-key">${v.key}</td>
       <td class="td-name">${v.name}</td>
       <td><span class="tag tag-family">${getFamilyLabel(v.family)}</span></td>
-      <td>${getTypeTag(v.source)}</td>
       <td style="font-family:'DM Mono',monospace;font-size:11px;color:var(--text-light);white-space:nowrap">${v.unit}</td>
-      <td>${getRequiredTag(v.required)}</td>
       <td class="td-desc">${v.desc}</td>
     </tr>
   `).join('');
